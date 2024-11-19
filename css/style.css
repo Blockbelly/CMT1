@@ -1,0 +1,52 @@
+:root {
+    --bg-primary: #f4f7fb;
+    --text-primary: #1d1d1f;
+    --text-secondary: #86868b;
+    --accent-color: #007aff;
+    --card-bg: white;
+    --shadow-light: rgba(0, 0, 0, 0.08);
+    --shadow-medium: rgba(0, 0, 0, 0.12);
+    --button-hover: #005bb5;
+    --button-border: #e0e0e5;
+    --button-radius: 12px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+    background-color: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 28px;
+    color: var(--text-primary);
+}
+
+.quiz-container {
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+    padding: 20px;
+    max-width: 600px;
+    text-align: center;
+}
+
+.option {
+    background: #f2f2f7;
+    border-radius: var(--button-radius);
+    padding: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    border: 1px solid var(--button-border);
+}
+
+.option:hover {
+    background-color: var(--accent-color);
+    color: white;
+}

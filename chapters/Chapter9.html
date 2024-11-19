@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Short Term Patterns</title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Short Term Patterns (Ch 9)</h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="location.href='../index.html'">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+    <script>
+        const questions = [
+    {
+        "question": "What defines a price gap?",
+        "options": [
+            "A small difference between open and close prices",
+            "A situation where the low of a bar is greater than the high of the previous bar",
+            "Any change in price during a trading session",
+            "A narrow range bar with declining volume"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Breakaway gaps typically occur:",
+        "options": [
+            "At the beginning of a trend",
+            "In the middle of a trend",
+            "At the end of a trend",
+            "After a consolidation phase has completed"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "An exhaustion gap can be identified by:",
+        "options": [
+            "Strong volume and continuation of the trend",
+            "Declining volume and a quick reversal",
+            "An extended period of consolidation",
+            "A gradual increase in price without filling the gap"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "The measurement technique for runaway gaps involves measuring:",
+        "options": [
+            "From the start of the trend to the gap close",
+            "From the low of the trend to the middle of the gap",
+            "From the open of the gap to the high of the next session",
+            "From the support level to the resistance level"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Gaps are most commonly seen in:",
+        "options": [
+            "Forex markets",
+            "Commodities with continuous trading",
+            "Equities with overnight closures",
+            "Cryptocurrencies traded 24/7"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "A dead cat bounce refers to:",
+        "options": [
+            "A sharp rally during an extended uptrend",
+            "A short-term rally after a significant decline",
+            "A bearish gap following a downward trend",
+            "A reversal pattern at market highs"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a one-bar reversal pattern?",
+        "options": [
+            "A bar where the high is lower than the previous bar's high",
+            "A bar with a close lower than the previous open after a price rise",
+            "A bar with increasing volume and a higher close",
+            "A bar where the low exceeds the previous low"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What characterizes an inside bar?",
+        "options": [
+            "A bar with a higher high and a lower low than the previous bar",
+            "A bar whose high and low are within the previous bar's range",
+            "A bar that closes higher than the previous close",
+            "A bar with a long shadow on both ends"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "The two-bar breakout rule involves:",
+        "options": [
+            "Buying after two consecutive higher closes",
+            "Selling after two consecutive lower opens",
+            "Entering a trade when the next bar exceeds the high of the previous bar",
+            "Trading based on the direction of a two-bar pattern"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Wide-range bars are typically associated with:",
+        "options": [
+            "Periods of consolidation",
+            "Breakouts and trend reversals",
+            "Declining volume and low volatility",
+            "Short-term corrections"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "A doji candlestick represents:",
+        "options": [
+            "A wide price range with a large body",
+            "A small body and shadows, indicating indecision",
+            "A continuation of the current trend",
+            "A gap between the open and close prices"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "The hammer candlestick is:",
+        "options": [
+            "A bearish reversal pattern at the top of a trend",
+            "A bullish reversal pattern at the bottom of a trend",
+            "A neutral pattern indicating consolidation",
+            "A candlestick with a small body and long upper shadow"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What distinguishes an engulfing pattern?",
+        "options": [
+            "A long wick that extends beyond the previous bar",
+            "A second candle that completely engulfs the previous candle’s body",
+            "A candle with no shadow and a large body",
+            "A pattern formed by consecutive dojis"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "The shooting star candlestick indicates:",
+        "options": [
+            "A strong uptrend continuation",
+            "A potential bearish reversal at the top of a trend",
+            "A bullish breakout from consolidation",
+            "A neutral market sentiment"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "In a piercing line pattern:",
+        "options": [
+            "The second candle closes below the midpoint of the first",
+            "The second candle closes within the body of the first",
+            "The second candle opens lower but closes higher within the first candle",
+            "The first candle is engulfed by the second candle"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Three black crows are:",
+        "options": [
+            "A bullish continuation pattern",
+            "Three consecutive bearish candles with lower closes",
+            "A series of inside bars followed by a breakout",
+            "A reversal pattern occurring at the bottom of a trend"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "A harami pattern consists of:",
+        "options": [
+            "Two candles where the second is engulfed by the first",
+            "Two candles where the second is within the range of the first",
+            "Three candles indicating a bullish reversal",
+            "A single candle with a long lower shadow"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "The morning star pattern signals:",
+        "options": [
+            "A bearish continuation",
+            "A bullish reversal at the bottom of a trend",
+            "A gap that is filled quickly",
+            "A neutral market sentiment"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What defines a three inside down pattern?",
+        "options": [
+            "Three consecutive candles with declining highs and lows",
+            "An engulfing pattern followed by a confirming bearish candle",
+            "A doji followed by two inside bars",
+            "A harami followed by a breakout candle in the opposite direction"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which of the following is the most reliable candlestick pattern?",
+        "options": [
+            "Three white soldiers",
+            "Engulfing pattern",
+            "Three inside up",
+            "Morning star"
+        ],
+        "correctAnswer": 0
+    },
+
+    {
+        "question": "Which type of gap is most commonly associated with the start of a new trend?",
+        "options": [
+            "Runaway gap",
+            "Exhaustion gap",
+            "Breakaway gap",
+            "Suspension gap"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "A gap that occurs within a strong, ongoing trend is called:",
+        "options": [
+            "Exhaustion gap",
+            "Breakaway gap",
+            "Measuring gap",
+            "Runaway gap"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "question": "If a gap fills within the same trading day, it is most likely a:",
+        "options": [
+            "Runaway gap",
+            "Opening gap",
+            "Exhaustion gap",
+            "Breakaway gap"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "The significance of a gap is often confirmed by:",
+        "options": [
+            "A corresponding increase in volume",
+            "A long shadow on the bar",
+            "A decrease in volume during the gap",
+            "An unchanged close price"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Exhaustion gaps are typically associated with:",
+        "options": [
+            "High volume and strong continuation of a trend",
+            "The final stage of a trend and low volume",
+            "Strong reversals and high volume",
+            "The middle of an established trend"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "A bar that completely engulfs the range of the previous bar is called:",
+        "options": [
+            "Inside bar",
+            "Outside bar",
+            "Narrow range bar",
+            "Wide range bar"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "The key feature of a dead cat bounce is:",
+        "options": [
+            "Increasing volume during the rally",
+            "Weak and declining volume during the rally",
+            "A rapid reversal to new highs",
+            "A gap occurring during the bounce"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Narrow range bars typically indicate:",
+        "options": [
+            "High market volatility",
+            "A lack of market direction and low volatility",
+            "A strong trend continuation",
+            "A reversal is imminent"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "An island reversal is identified by:",
+        "options": [
+            "A series of consecutive inside bars",
+            "A bar or group of bars isolated by gaps on both sides",
+            "A long bar followed by a series of narrow range bars",
+            "A gap that quickly fills within the next session"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Spikes or large bars often signal:",
+        "options": [
+            "Consolidation in the trend",
+            "A decrease in market volatility",
+            "The start or end of a trend",
+            "A continuation of the current trend"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "The horn pattern is a variation of which type of pattern?",
+        "options": [
+            "Inside bar",
+            "Two-bar reversal",
+            "Three-bar reversal",
+            "Narrow range bar"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is a primary indicator of a trend correction pattern?",
+        "options": [
+            "Increased volume during a breakout",
+            "A retracement after a strong trend",
+            "The appearance of consecutive outside bars",
+            "A series of narrow range bars"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "A spinning top candlestick indicates:",
+        "options": [
+            "A strong continuation of the trend",
+            "Indecision in the market",
+            "A reversal of the trend",
+            "A breakout from consolidation"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "The morning star candlestick pattern is:",
+        "options": [
+            "A three-candle bearish reversal pattern",
+            "A three-candle bullish reversal pattern",
+            "A continuation pattern in an uptrend",
+            "A neutral pattern with no directional bias"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "The difference between a hammer and a hanging man is:",
+        "options": [
+            "The position of the pattern in the trend",
+            "The size of the candle’s shadow",
+            "The volume during the pattern",
+            "The gap preceding the candle"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "A three black crows pattern forms during:",
+        "options": [
+            "The start of a strong uptrend",
+            "A reversal from an uptrend to a downtrend",
+            "The continuation of a downtrend",
+            "A period of low market activity"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "A harami is best identified as:",
+        "options": [
+            "A large candle followed by a smaller one inside its range",
+            "A small candle followed by a larger one engulfing it",
+            "A candlestick with no shadow",
+            "A single candle with a small body and long wick"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is true about the three white soldiers pattern?",
+        "options": [
+            "It often forms at market highs",
+            "It signals bearish continuation",
+            "It forms at market bottoms and indicates bullish reversal",
+            "It requires the candles to have equal-length bodies"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "The dark cloud cover pattern indicates:",
+        "options": [
+            "A bullish continuation",
+            "A bearish reversal at market tops",
+            "A neutral market sentiment",
+            "A bullish reversal at market bottoms"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "A piercing line candlestick pattern indicates:",
+        "options": [
+            "A bearish continuation",
+            "A reversal to the upside",
+            "The beginning of a strong downtrend",
+            "A trend continuation in either direction"
+        ],
+        "correctAnswer": 1
+    }
+
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "Index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
