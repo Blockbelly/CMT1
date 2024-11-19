@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Basics of Cycle Analysis</title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Dow Theory (Ch 2) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+	<div id="review-section" style="display: none; margin-top: 20px;">
+
+</div>
+
+    <script>
+        const questions = [
+   {
+        question: "Who is considered the father of technical analysis?",
+        options: ["William Hamilton", "Charles Dow", "Robert Rhea", "Jesse Livermore"],
+        correctAnswer: 1
+    },
+    {
+        question: "What is the primary trend according to Dow Theory?",
+        options: [
+            "Short-term movements in the market",
+            "Long-term market direction",
+            "Reactions to news events",
+            "Secondary oscillations"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "What phase in Dow's ideal market picture represents accumulation?",
+        options: [
+            "Top phase",
+            "Downtrend phase",
+            "Uptrend phase",
+            "Bottom phase"
+        ],
+        correctAnswer: 3
+    },
+    {
+        question: "According to Dow Theory, what confirms a primary uptrend?",
+        options: [
+            "Media attention",
+            "Higher highs in both relevant averages",
+            "Increased commodity prices",
+            "Declining interest rates"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Which of the following is NOT a tenet of Dow Theory?",
+        options: [
+            "The market moves in phases",
+            "Primary trends are inviolable",
+            "Price averages always lead the market",
+            "Trends persist until a reversal is confirmed"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "Which trend is described as a 5% swing in Dow Theory?",
+        options: [
+            "Primary trend",
+            "Secondary trend",
+            "Minor trend",
+            "Momentum trend"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "What is the primary cause of the distribution phase in the market?",
+        options: [
+            "Institutional buying",
+            "Retail investors buying near the top",
+            "Decline in commodity prices",
+            "High interest rates"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "What did Charles Dow emphasize when analyzing market movements?",
+        options: [
+            "Only use intraday highs and lows",
+            "Focus exclusively on closing prices",
+            "Ignore volume entirely",
+            "Analyze only individual stocks"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Which volume pattern indicates the end of a bull market?",
+        options: [
+            "Decreasing volume",
+            "Sharp increase in volume",
+            "Flat volume",
+            "Volume similar to prior movements"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "How long does a secondary reaction typically last?",
+        options: [
+            "Less than 1 week",
+            "1 to 2 weeks",
+            "3 weeks to 3 months",
+            "Over 6 months"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "According to Dow Theory, what often follows the accumulation phase?",
+        options: [
+            "Distribution phase",
+            "Downtrend",
+            "Uptrend",
+            "Panic selling"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "What role does volume play in confirming trends?",
+        options: [
+            "Volume is irrelevant to trend analysis",
+            "Low volume confirms a strong trend",
+            "Rising volume supports the price movement",
+            "Falling volume indicates trend reversals"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "What is a criticism of Dow Theory?",
+        options: [
+            "It provides real-time signals",
+            "Signals lag the market",
+            "It doesn't define averages",
+            "Trends are always clearly defined"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "In Dow Theory, which term is often interchangeable with 'minor trend'?",
+        options: [
+            "Short-term trend",
+            "Major trend",
+            "Long-term trend",
+            "Secondary trend"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "What happens during the panic phase of the market cycle?",
+        options: [
+            "Investors buy heavily",
+            "Prices stagnate",
+            "Investors sell in fear",
+            "Commodity prices surge"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "What is the impact of news on the market according to Dow Theory?",
+        options: [
+            "News is irrelevant to market movements",
+            "News discounts current market prices",
+            "Market prices discount all news",
+            "Only positive news affects market trends"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "What confirms the end of a bear market?",
+        options: [
+            "Sharp rise in interest rates",
+            "Decline in commodity prices",
+            "Rise in trading volume",
+            "Increased media coverage"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "Which of the following describes a characteristic of a secondary reaction?",
+        options: [
+            "Low trading volume",
+            "High volatility",
+            "Break of trendlines",
+            "Longer duration than primary trends"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "What did Charles Dow identify as necessary for economic expansion?",
+        options: [
+            "Government intervention",
+            "Sufficient liquidity",
+            "Expansion in both industrials and transports",
+            "New technological innovations"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "Which principle states that trends persist until there is evidence of reversal?",
+        options: [
+            "Confirmation principle",
+            "Volume principle",
+            "Persistence principle",
+            "Primary trend principle"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "What is one key criticism of Dow Theory's signals?",
+        options: [
+            "They are always early",
+            "They lag behind market movements",
+            "They rely on unreliable indicators",
+            "They ignore market averages"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Which of the following trends is typically the shortest in duration?",
+        options: [
+            "Primary trend",
+            "Secondary trend",
+            "Minor trend",
+            "Cyclical trend"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "What happens to trading volume during a typical secondary reaction?",
+        options: [
+            "Volume increases significantly",
+            "Volume remains high and steady",
+            "Volume declines compared to primary trend movements",
+            "Volume spikes unpredictably"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "What are the three movements described in Dow Theory?",
+        options: [
+            "Primary, tertiary, and cyclical",
+            "Primary, secondary, and minor",
+            "Long-term, medium-term, and short-term",
+            "Major, minor, and corrective"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Which Dow Theory principle emphasizes only using closing prices?",
+        options: [
+            "Trend confirmation",
+            "Volume principle",
+            "Closing principle",
+            "Price principle"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "What do major market averages do according to Dow Theory?",
+        options: [
+            "They confirm market manipulation",
+            "They reflect all market information",
+            "They lag behind individual stock movements",
+            "They do not account for economic changes"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Which type of trend is most impacted by manipulation?",
+        options: [
+            "Primary trend",
+            "Secondary trend",
+            "Minor trend",
+            "All trends equally"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "What is typically observed during the participation phase of the market cycle?",
+        options: [
+            "A lack of interest",
+            "Moderate buying activity",
+            "Explosive price movements",
+            "Market panic"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "What confirms an uptrend in market averages?",
+        options: [
+            "Higher troughs only",
+            "Higher highs and higher troughs",
+            "Flat price movements",
+            "Lower volume"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "What does Dow Theory say about counter moves in a trend?",
+        options: [
+            "They represent a trend reversal",
+            "They should be ignored",
+            "They are expected and part of the trend",
+            "They invalidate the trend"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "What phase often follows the distribution phase in Dow's ideal market picture?",
+        options: [
+            "Uptrend",
+            "Accumulation",
+            "Downtrend",
+            "Participation"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "How does Dow Theory recommend handling ambiguous trend signals?",
+        options: [
+            "Assume a reversal is occurring",
+            "Take a neutral stance until confirmation",
+            "Give the benefit of the doubt to the current trend",
+            "Ignore the trend entirely"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "According to Dow Theory, which sector traditionally reflects economic expansion alongside industrials?",
+        options: [
+            "Technology",
+            "Energy",
+            "Transports",
+            "Healthcare"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "What often marks the end of a bear market?",
+        options: [
+            "High interest rates",
+            "Increased trading volume",
+            "Media euphoria",
+            "Low commodity prices"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "What term describes the market's ability to absorb all available information into its prices?",
+        options: [
+            "Market manipulation",
+            "Discounting principle",
+            "Efficient market hypothesis",
+            "Price divergence"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "What often signals the end of a primary trend?",
+        options: [
+            "A large spike in volume",
+            "Breaking trendlines and larger swings",
+            "Short-term price corrections",
+            "Media speculation"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "How should trends be identified, according to Dow Theory?",
+        options: [
+            "Through subjective observation",
+            "Using consistent technical definitions",
+            "By relying on fundamental analysis",
+            "Through speculative assumptions"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "Which of the following is NOT a characteristic of the accumulation phase?",
+        options: [
+            "Low public participation",
+            "Increased activity by institutional investors",
+            "High media coverage",
+            "Formation of price floors"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "What is the primary advantage of confirmation in Dow Theory?",
+        options: [
+            "It prevents any losses",
+            "It eliminates the need for volume analysis",
+            "It validates market movements across averages",
+            "It identifies short-term opportunities"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "How do trends typically behave, as described in Dow Theory?",
+        options: [
+            "They are volatile and unpredictable",
+            "They persist until proven otherwise",
+            "They are driven only by news",
+            "They only occur in bullish markets"
+        ],
+        correctAnswer: 1
+    }
+
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "Index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>

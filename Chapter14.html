@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Candlestick Charting Essentials </title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Candlestick Charting Essentials (Ch 14) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="location.href='../index.html'">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+    <script>
+        const questions = [
+   {
+            question: "What does a candlestick represent in a financial chart?",
+            options: [
+                "Opening price only",
+                "Closing price only",
+                "Opening, closing, high, and low prices",
+                "Average price"
+            ],
+            answer: 2
+        },
+        {
+            question: "In a candlestick chart, what does a green (or white) candle indicate?",
+            options: [
+                "Price decrease",
+                "Price increase",
+                "No change in price",
+                "Market indecision"
+            ],
+            answer: 1
+        },
+        {
+            question: "What do the wicks (or shadows) of a candlestick represent?",
+            options: [
+                "The opening price",
+                "The closing price",
+                "The high and low prices during the period",
+                "The average price"
+            ],
+            answer: 2
+        },
+        {
+            question: "Which part of the candlestick shows the opening price?",
+            options: [
+                "The body",
+                "The upper shadow",
+                "The lower shadow",
+                "It varies based on the color of the candle"
+            ],
+            answer: 0
+        },
+        {
+            question: "What is the primary purpose of using candlestick charts?",
+            options: [
+                "To predict future prices based on historical averages",
+                "To visualize price movements over time",
+                "To assess company fundamentals",
+                "To calculate moving averages"
+            ],
+            answer: 1
+        },
+        {
+            question: "How many price points does each candlestick typically represent?",
+            options: ["One", "Two", "Four", "Eight"],
+            answer: 2
+        },
+        {
+            question: "What does a red (or black) candle signify?",
+            options: ["Bullish sentiment", "Bearish sentiment", "Market consolidation", "High volatility"],
+            answer: 1
+        },
+        {
+            question: "Which of the following is NOT a component of a candlestick?",
+            options: ["Body", "Shadow", "Volume bar", "Open and close prices"],
+            answer: 2
+        },
+        {
+            question: "How can you identify a bullish reversal pattern in candlesticks?",
+            options: ["By looking for a series of red candles", "By observing a hammer or engulfing pattern after a downtrend", "By analyzing volume trends only", "By using moving averages"],
+            answer: 1
+        },
+        {
+            question: "What is the significance of the length of the candlestick body?",
+            options: ["It indicates market volatility.", "It shows the strength of buying or selling pressure.", "It represents the time frame.", "It has no significance."],
+            answer: 1
+        },
+        {
+            question: "What is a 'Doji' candlestick pattern indicative of?",
+            options: ["Strong trend continuation", "Market indecision or reversal potential", "High volatility period", "A confirmed bullish trend"],
+            answer: 1
+        },
+        {
+            question: "Which pattern is characterized by two consecutive candles where the second engulfs the first?",
+            options: ["Morning Star", "Evening Star", "Engulfing Pattern", "Shooting Star"],
+            answer: 2
+        },
+        {
+            question: "What does a 'Hammer' candlestick indicate when found at the bottom of a downtrend?",
+            options: ["Continuation of the downtrend", "Potential reversal to an uptrend", "Market indecision", "Increased selling pressure"],
+            answer: 1
+        },
+        {
+            question: "A 'Shooting Star' pattern typically appears at which point in a trend?",
+            options: ["At market bottom", "At market top", "During sideways movement", "At random points"],
+            answer: 1
+        },
+        {
+            question: "'Evening Star' pattern suggests what?",
+            options: ["Bullish reversal", "Bearish reversal", "Continuation pattern", "Indecision"],
+            answer: 1
+        },
+        {
+            question: "Which candlestick pattern consists of three candles and indicates potential reversal after an uptrend?",
+            options: ["Three White Soldiers", "Three Black Crows", "Morning Star", "Evening Star"],
+            answer: 3
+        },
+        {
+            question: "What is indicated by a 'Bullish Engulfing' pattern?",
+            options: ["Strong selling pressure", "Weak buying pressure", "Strong buying pressure that may lead to upward movement", "Market consolidation"],
+            answer: 2
+        },
+        {
+            question: "Which candlestick formation typically indicates that sellers are gaining control after an uptrend?",
+            options: ["Bullish Harami", "Bearish Harami", "Morning Star", "Hammer"],
+            answer: 1
+        },
+        {
+            question: "What is the implication of a 'Spinning Top' candlestick pattern?",
+            options: ["Strong trend continuation", "Indecision in the market with potential for reversal", "Confirmation of trend strength", "High volatility"],
+            answer: 1
+        },
+        {
+            question: "The 'Piercing Line' pattern occurs in which context?",
+            options: ["At market tops indicating bearish reversal", "At market bottoms indicating bullish reversal", "In sideways markets indicating consolidation", "None of the above"],
+            answer: 1
+        },
+        {
+            question: "Which of these factors can enhance the reliability of candlestick patterns?",
+            options: ["Volume confirmation", "Time frame consistency", "Confluence with other technical indicators", "All of the above"],
+            answer: 3
+        },
+        {
+            question: "What does it mean if a candle closes significantly higher than its open with high volume?",
+            options: ["Strong bullish sentiment likely to continue", "Weak bullish sentiment likely to reverse", "Market indecision", "Bearish sentiment"],
+            answer: 0
+        },
+        {
+            question: "How can traders utilize candlesticks in conjunction with support and resistance levels?",
+            options: ["To confirm breakout points", "To identify potential reversals at key levels confirmed by specific patterns", "To gauge market sentiment", "All of the above"],
+            answer: 3
+        },
+        {
+            question: "In technical analysis, what does it mean when there are consecutive long red candles followed by a long green candle?",
+            options: ["A continuation of the bearish trend", "A strong signal for a reversal to the upside", "A sign of consolidation", "A confirmation of market uncertainty"],
+            answer: 1
+        }
+
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "Index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>

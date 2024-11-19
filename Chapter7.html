@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMT Level I Sample Test - Bar Chart Patterns</title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Moving Averages (Ch 7)</h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="location.href='../index.html'">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+    <script>
+        const questions = [
+    {
+        "question": "What is the key purpose of moving averages in technical analysis?",
+        "options": [
+            "To eliminate all market noise",
+            "To smooth out price data for trend analysis",
+            "To calculate future prices",
+            "To identify overbought conditions"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which moving average uses equal weighting for all data points in its calculation?",
+        "options": [
+            "Simple Moving Average (SMA)",
+            "Weighted Moving Average (WMA)",
+            "Exponential Moving Average (EMA)",
+            "Wilder Moving Average"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a falling moving average signify?",
+        "options": [
+            "An uptrend",
+            "A downtrend",
+            "Market volatility",
+            "A sideways market"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary drawback of using short-period moving averages?",
+        "options": [
+            "Higher sensitivity to market noise",
+            "Slower reaction to price changes",
+            "Difficulty in calculation",
+            "Poor trend identification"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Which moving average type gives the most weight to recent prices?",
+        "options": [
+            "SMA",
+            "EMA",
+            "WMA",
+            "Geometric Moving Average"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the weight assigned to the most recent data in a 10-period EMA?",
+        "options": [
+            "20%",
+            "18.18%",
+            "25%",
+            "10%"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "How does a Weighted Moving Average (WMA) calculate weights?",
+        "options": [
+            "Equal for all data points",
+            "Assigns higher weights to the most recent data",
+            "Uses a geometric progression of weights",
+            "Puts more weight on the middle data points"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary purpose of an EMA over an SMA?",
+        "options": [
+            "To simplify calculations",
+            "To react faster to recent price changes",
+            "To eliminate historical data entirely",
+            "To identify cycle patterns"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which term refers to the effect of a significant past price leaving a moving average calculation?",
+        "options": [
+            "Volatility effect",
+            "Drop-off effect",
+            "Mean reversion effect",
+            "Momentum effect"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "How is a 10-period WMA calculated?",
+        "options": [
+            "By averaging 10 closing prices equally",
+            "By assigning weights from 1 to 10 to the most recent 10 prices",
+            "By multiplying each price by a fixed percentage",
+            "By combining SMA and EMA values"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the defining characteristic of a Wilder Moving Average?",
+        "options": [
+            "Uses logarithmic calculations",
+            "Simpler calculation compared to SMA and EMA",
+            "Prioritizes older data over newer data",
+            "Has no drop-off effect"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which of the following uses a triangular weighting scheme?",
+        "options": [
+            "SMA",
+            "Geometric Moving Average",
+            "Triangular Weighted Moving Average",
+            "Wilder Moving Average"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the key difference between a Centered Moving Average and a Simple Moving Average?",
+        "options": [
+            "Centered averages are calculated backward",
+            "Centered averages shift data forward by half its length",
+            "Centered averages eliminate older data",
+            "Centered averages focus only on cycle analysis"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What type of moving average is most commonly used in indices?",
+        "options": [
+            "EMA",
+            "Geometric Moving Average",
+            "WMA",
+            "Wilder Moving Average"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a geometric moving average emphasize?",
+        "options": [
+            "Current price movements",
+            "Exponential data shifts",
+            "Returns over multiple periods",
+            "Volatility adjustments"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Which indicator is the foundation for ADX?",
+        "options": [
+            "Bollinger Bands",
+            "Directional Movement Indicator (DMI)",
+            "Wilder Moving Average",
+            "MACD"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "In the ADX system, what does a rising ADX line indicate?",
+        "options": [
+            "Increasing trend strength",
+            "A bullish market",
+            "A bearish market",
+            "Sideways momentum"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a peak in ADX signify?",
+        "options": [
+            "Beginning of a new trend",
+            "End of a trend",
+            "Market entering high volatility",
+            "Strong bullish movement"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "When does an ADX signal a sideways market?",
+        "options": [
+            "When ADX is above 40",
+            "When ADX is falling below both DMI lines",
+            "When ADX crosses above DMI+",
+            "When DMI+ equals DMI-"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the significance of an ADX value above 20?",
+        "options": [
+            "High market volatility",
+            "Strong trend in place",
+            "Directionless market conditions",
+            "Market correction expected"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a common application of moving averages in trading strategies?",
+        "options": [
+            "Identifying overbought levels",
+            "Determining trend direction and support/resistance",
+            "Measuring portfolio risk",
+            "Calculating absolute returns"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a moving average crossover strategy?",
+        "options": [
+            "A strategy to identify sideways markets",
+            "A system where two moving averages cross to signal entries/exits",
+            "A strategy based on extreme price points",
+            "A method to calculate EMA weights"
+        ],
+        "correctAnswer": 1
+    },
+
+    {
+        "question": "What distinguishes Bollinger Bands from moving average envelopes?",
+        "options": [
+            "Bollinger Bands adjust based on volatility",
+            "Bollinger Bands are calculated using geometric averages",
+            "Envelopes use exponential smoothing",
+            "Envelopes are more suitable for volatile markets"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "How many standard deviations are typically used in Bollinger Bands?",
+        "options": [
+            "One",
+            "Two",
+            "Three",
+            "Four"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the bandwidth indicator measure?",
+        "options": [
+            "Average price changes",
+            "The distance between upper and lower Bollinger Bands",
+            "Market momentum strength",
+            "Trend confirmation signals"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a triangular moving average emphasize?",
+        "options": [
+            "The beginning of trends",
+            "Price extremes",
+            "Data points in the middle of the moving average window",
+            "Volatility adjustments"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the main benefit of using moving averages in trading systems?",
+        "options": [
+            "Instantaneous trend detection",
+            "Reducing market noise and whipsaws",
+            "Enhancing portfolio returns",
+            "Eliminating lag"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a moving average envelope add to the calculation?",
+        "options": [
+            "Fixed percentages above and below the moving average",
+            "A standard deviation multiplier",
+            "An EMA smoothing factor",
+            "Real-time price adjustments"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "How do Bollinger Bands define volatility?",
+        "options": [
+            "Through ATR calculations",
+            "Using standard deviation around a moving average",
+            "By averaging high and low prices",
+            "By calculating price extremes"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "When are moving average strategies least effective?",
+        "options": [
+            "In trending markets",
+            "In volatile markets",
+            "In sideways markets",
+            "During market corrections"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Which signal does price crossing above a moving average generate?",
+        "options": [
+            "A sell signal",
+            "A short-sell signal",
+            "A buy signal",
+            "A trend-neutral signal"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the primary use of Donchian Channels?",
+        "options": [
+            "Measuring portfolio risk",
+            "Identifying trend strength",
+            "Detecting breakouts above or below recent highs and lows",
+            "Calculating cycle patterns"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What trading rule is common for ADX?",
+        "options": [
+            "Avoid trades when ADX is falling",
+            "Enter trades when ADX is below 10",
+            "Trade only when DMI+ equals DMI-",
+            "Use ADX for mean reversion signals"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the key advantage of using variable EMAs?",
+        "options": [
+            "Simplified calculation",
+            "Adjusts to market volatility",
+            "Eliminates lag",
+            "Weights older data equally"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What defines a centered moving average?",
+        "options": [
+            "Shifted forward by a full period",
+            "Adjusted using ATR values",
+            "Shifted back by half its length",
+            "Weighted toward the most recent data"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does a negative divergence between price and ADX indicate?",
+        "options": [
+            "A weakening trend",
+            "A strengthening trend",
+            "A sideways market",
+            "Increasing volatility"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the primary purpose of ATR in Wilder's calculations?",
+        "options": [
+            "Measuring trend direction",
+            "Determining volatility",
+            "Identifying overbought conditions",
+            "Smoothing moving averages"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which type of band accounts for volatility in its calculation?",
+        "options": [
+            "Moving average envelopes",
+            "Bollinger Bands",
+            "Donchian Channels",
+            "SMA"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What distinguishes variable EMAs from regular EMAs?",
+        "options": [
+            "Use of geometric progression",
+            "Volatility-based weight adjustments",
+            "Higher sensitivity to lag",
+            "Equal weighting"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the relationship between ADX and DMI lines?",
+        "options": [
+            "ADX shows direction; DMI shows trend strength",
+            "ADX measures trend strength; DMI shows direction",
+            "Both ADX and DMI measure trend direction",
+            "ADX is calculated from DMI- only"
+        ],
+        "correctAnswer": 1
+    }
+
+        ];
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "Index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
