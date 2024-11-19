@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Basic Oscillators</title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Basic Oscillators (Ch 13.2) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+    <script>
+        const questions = [
+ 
+
+    {
+        "question": "What is the primary objective of a technical analyst?",
+        "options": [
+            "To identify the fundamentals of a stock",
+            "To determine market trends and trade with them",
+            "To analyze the financial health of companies",
+            "To predict interest rate movements"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What are the three main types of trends?",
+        "options": [
+            "Uptrend, Downtrend, Sideways Trend",
+            "Short-term, Medium-term, Long-term",
+            "Primary, Secondary, Tertiary",
+            "Linear, Exponential, Logarithmic"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Which characteristic defines an uptrend?",
+        "options": [
+            "Lower peaks and lower troughs",
+            "Higher peaks and higher troughs",
+            "Horizontal peaks and troughs",
+            "Irregular oscillations"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does linear regression in trend analysis represent?",
+        "options": [
+            "A method to identify market sentiment",
+            "A line of best fit for data points",
+            "A statistical way to calculate averages",
+            "A tool to predict future price levels"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is essential to consider when analyzing trends?",
+        "options": [
+            "Historical averages",
+            "Context of time",
+            "Market sentiment",
+            "Trading volume"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the usual duration of a primary trend?",
+        "options": [
+            "Days",
+            "Weeks",
+            "Months to years",
+            "Intraday"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the main characteristic of a secondary trend?",
+        "options": [
+            "It lasts for years",
+            "It is measured in weeks to months",
+            "It has no direction",
+            "It is primarily used for intraday trading"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which term is used for trends lasting less than a week?",
+        "options": [
+            "Primary trends",
+            "Secondary trends",
+            "Short-term trends",
+            "Logarithmic trends"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What indicates a significant change in trend based on slope?",
+        "options": [
+            "A flatter slope",
+            "A steeper slope than historical trends",
+            "A constant slope over time",
+            "No identifiable slope"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which type of trendline is used for upward trends?",
+        "options": [
+            "Connecting higher peaks",
+            "Connecting lower troughs",
+            "Connecting all data points",
+            "Connecting sideways oscillations"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What should a technical analyst do when a trendline is broken?",
+        "options": [
+            "Immediately exit all positions",
+            "Analyze for confirmation with other indicators",
+            "Switch to fundamental analysis",
+            "Ignore the break"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is an internal trendline?",
+        "options": [
+            "A line connecting the midpoint of the price action",
+            "A line connecting only peaks",
+            "A line connecting only troughs",
+            "A logarithmic representation of price action"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a channel represent in trend analysis?",
+        "options": [
+            "A single trendline used for reference",
+            "Parallel trendlines forming boundaries",
+            "An exponential price movement",
+            "Irregular market behavior"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does high trading volume at a price peak indicate?",
+        "options": [
+            "Confirmation of a continued uptrend",
+            "A possible reversal or market top",
+            "Low interest in the stock",
+            "Market indecision"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the Fibonacci retracement level of 61.8% known as?",
+        "options": [
+            "Golden ratio",
+            "Pivot point",
+            "Base level",
+            "Critical retracement level"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does the Donchian breakout method involve?",
+        "options": [
+            "Drawing channels based on Fibonacci ratios",
+            "Identifying the highest high and lowest low over a period",
+            "Using moving averages to find trend reversals",
+            "Analyzing trading volume trends"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which tool uses a geometric progression to measure support and resistance?",
+        "options": [
+            "Gan fans",
+            "Linear regression",
+            "Andrews Pitchfork",
+            "Logarithmic charts"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is a key indication of trend exhaustion in a channel?",
+        "options": [
+            "Price consistently hitting the upper boundary",
+            "Price failing to reach the upper boundary",
+            "Increasing volume",
+            "Constant movement within the channel"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is an example of a psychological factor in support and resistance?",
+        "options": [
+            "Exponential price movements",
+            "Recency bias",
+            "Algorithmic trading",
+            "Moving averages"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of volume in confirming a trend?",
+        "options": [
+            "It has no role in confirming trends",
+            "High volume confirms a strong trend or reversal",
+            "Low volume confirms market stability",
+            "Volume does not affect price action"
+        ],
+        "correctAnswer": 1
+    },
+
+    {
+        "question": "What is the primary objective of a technical analyst?",
+        "options": [
+            "To identify the fundamentals of a stock",
+            "To determine market trends and trade with them",
+            "To analyze the financial health of companies",
+            "To predict interest rate movements"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What are the three main types of trends?",
+        "options": [
+            "Uptrend, Downtrend, Sideways Trend",
+            "Short-term, Medium-term, Long-term",
+            "Primary, Secondary, Tertiary",
+            "Linear, Exponential, Logarithmic"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Which characteristic defines an uptrend?",
+        "options": [
+            "Lower peaks and lower troughs",
+            "Higher peaks and higher troughs",
+            "Horizontal peaks and troughs",
+            "Irregular oscillations"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does linear regression in trend analysis represent?",
+        "options": [
+            "A method to identify market sentiment",
+            "A line of best fit for data points",
+            "A statistical way to calculate averages",
+            "A tool to predict future price levels"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is essential to consider when analyzing trends?",
+        "options": [
+            "Historical averages",
+            "Context of time",
+            "Market sentiment",
+            "Trading volume"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the usual duration of a primary trend?",
+        "options": [
+            "Days",
+            "Weeks",
+            "Months to years",
+            "Intraday"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the main characteristic of a secondary trend?",
+        "options": [
+            "It lasts for years",
+            "It is measured in weeks to months",
+            "It has no direction",
+            "It is primarily used for intraday trading"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which term is used for trends lasting less than a week?",
+        "options": [
+            "Primary trends",
+            "Secondary trends",
+            "Short-term trends",
+            "Logarithmic trends"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What indicates a significant change in trend based on slope?",
+        "options": [
+            "A flatter slope",
+            "A steeper slope than historical trends",
+            "A constant slope over time",
+            "No identifiable slope"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which type of trendline is used for upward trends?",
+        "options": [
+            "Connecting higher peaks",
+            "Connecting lower troughs",
+            "Connecting all data points",
+            "Connecting sideways oscillations"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What should a technical analyst do when a trendline is broken?",
+        "options": [
+            "Immediately exit all positions",
+            "Analyze for confirmation with other indicators",
+            "Switch to fundamental analysis",
+            "Ignore the break"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is an internal trendline?",
+        "options": [
+            "A line connecting the midpoint of the price action",
+            "A line connecting only peaks",
+            "A line connecting only troughs",
+            "A logarithmic representation of price action"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a channel represent in trend analysis?",
+        "options": [
+            "A single trendline used for reference",
+            "Parallel trendlines forming boundaries",
+            "An exponential price movement",
+            "Irregular market behavior"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does high trading volume at a price peak indicate?",
+        "options": [
+            "Confirmation of a continued uptrend",
+            "A possible reversal or market top",
+            "Low interest in the stock",
+            "Market indecision"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the Fibonacci retracement level of 61.8% known as?",
+        "options": [
+            "Golden ratio",
+            "Pivot point",
+            "Base level",
+            "Critical retracement level"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does the Donchian breakout method involve?",
+        "options": [
+            "Drawing channels based on Fibonacci ratios",
+            "Identifying the highest high and lowest low over a period",
+            "Using moving averages to find trend reversals",
+            "Analyzing trading volume trends"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which tool uses a geometric progression to measure support and resistance?",
+        "options": [
+            "Gan fans",
+            "Linear regression",
+            "Andrews Pitchfork",
+            "Logarithmic charts"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is a key indication of trend exhaustion in a channel?",
+        "options": [
+            "Price consistently hitting the upper boundary",
+            "Price failing to reach the upper boundary",
+            "Increasing volume",
+            "Constant movement within the channel"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is an example of a psychological factor in support and resistance?",
+        "options": [
+            "Exponential price movements",
+            "Recency bias",
+            "Algorithmic trading",
+            "Moving averages"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of volume in confirming a trend?",
+        "options": [
+            "It has no role in confirming trends",
+            "High volume confirms a strong trend or reversal",
+            "Low volume confirms market stability",
+            "Volume does not affect price action"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does Andrews Pitchfork require for drawing its channels?",
+        "options": [
+            "Three data points: beginning of primary trend, start and end of secondary trend",
+            "Two parallel lines connecting peaks and troughs",
+            "A logarithmic scale adjustment",
+            "Fibonacci retracement levels"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is a common mistake when using trendlines?",
+        "options": [
+            "Ignoring secondary trends",
+            "Relying solely on intraday data",
+            "Treating trendlines as exact points rather than zones",
+            "Drawing multiple lines in the same direction"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Which ratio is associated with Fibonacci retracements?",
+        "options": [
+            "2.618",
+            "1.382",
+            "1.618",
+            "0.786"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Which tool measures speed and acceleration of trends?",
+        "options": [
+            "Gan fans",
+            "Andrews Pitchfork",
+            "Fibonacci channels",
+            "Linear regression"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "How does a logarithmic trendline differ from a linear trendline?",
+        "options": [
+            "It is drawn on a curved chart",
+            "It adjusts for price changes over time",
+            "It ignores extreme data points",
+            "It is only used for short-term trends"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a breakout in a trading range typically signify?",
+        "options": [
+            "A return to the range",
+            "A continuation of the sideways trend",
+            "The start of a new trend",
+            "Volume decrease"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the significance of multiple touches on a trendline?",
+        "options": [
+            "Indicates the trendline is unreliable",
+            "Confirms the strength of the trendline",
+            "Suggests an imminent breakout",
+            "Shows divergence in market sentiment"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What happens when resistance becomes support?",
+        "options": [
+            "The price consolidates",
+            "The price often breaks down further",
+            "The resistance level is invalidated",
+            "The level reverses its role"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "question": "What does the slope of a trendline indicate?",
+        "options": [
+            "The strength of support or resistance",
+            "The duration of the trend",
+            "The momentum of the trend",
+            "The volume of trades"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the purpose of speed lines in trend analysis?",
+        "options": [
+            "To measure volume trends",
+            "To track price acceleration",
+            "To identify trading ranges",
+            "To define support zones"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "How is a channel different from a trendline?",
+        "options": [
+            "A channel uses parallel lines",
+            "A channel adjusts automatically",
+            "A channel is only used for sideways markets",
+            "A channel measures Fibonacci retracements"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the key feature of Donchian breakout strategy?",
+        "options": [
+            "Buying after a breakout of a set period’s high",
+            "Selling before a retracement",
+            "Drawing trendlines through peak volume zones",
+            "Using RSI for confirmation"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does failure to reach the upper boundary in a channel indicate?",
+        "options": [
+            "A breakout is imminent",
+            "Weakness in the prevailing trend",
+            "Oversaturation of buyers",
+            "Neutral market sentiment"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'retracement' refer to in a trend?",
+        "options": [
+            "A reversal of the primary trend",
+            "A temporary movement against the trend",
+            "A confirmation of the trend",
+            "A logarithmic price adjustment"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "How does volume behave in a strong trend?",
+        "options": [
+            "Volume is irrelevant to trend strength",
+            "Volume decreases steadily",
+            "Volume increases in the direction of the trend",
+            "Volume remains constant"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is a common use of Fibonacci retracements?",
+        "options": [
+            "Identifying long-term trends",
+            "Predicting breakouts",
+            "Measuring potential reversal levels",
+            "Analyzing trading volume"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the role of Andrews Pitchfork in trend analysis?",
+        "options": [
+            "To identify reversal points",
+            "To create parallel support and resistance lines",
+            "To confirm retracement levels",
+            "To analyze trading ranges"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What should traders consider when using logarithmic trendlines?",
+        "options": [
+            "They ignore extreme price changes",
+            "They represent percentage changes",
+            "They are limited to daily data",
+            "They are less reliable than linear lines"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the significance of volume at support or resistance levels?",
+        "options": [
+            "Volume has no effect on these levels",
+            "High volume indicates the level will break",
+            "Volume confirms the strength of the level",
+            "Low volume signals market indecision"
+        ],
+        "correctAnswer": 2
+    }
+
+
+
+
+
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
