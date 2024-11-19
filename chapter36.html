@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Sentiment Measures (Ch 36) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+    <script>
+        const questions = [
+    {
+        "question": "What does sentiment analysis primarily focus on?",
+        "options": [
+            "Predicting market reversals",
+            "Analyzing market psychology",
+            "Identifying price trends",
+            "Measuring trading volume"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which of the following is considered a bullish sentiment indicator?",
+        "options": [
+            "High put/call ratio",
+            "Low investor sentiment",
+            "High number of short positions",
+            "Optimism among retail investors"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "question": "What does a high put/call ratio typically indicate?",
+        "options": [
+            "Bearish sentiment",
+            "Bullish sentiment",
+            "Market equilibrium",
+            "Indecision in the market"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the significance of the AAII sentiment survey?",
+        "options": [
+            "It measures the number of trades executed",
+            "It provides data on professional investor sentiment",
+            "It gauges the sentiment of individual investors",
+            "It tracks institutional buying activity"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does a high level of short interest often signify?",
+        "options": [
+            "Strong bearish sentiment",
+            "Strong bullish sentiment",
+            "Market equilibrium",
+            "Low volatility"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What can extreme levels of optimism among investors indicate?",
+        "options": [
+            "A strong bullish continuation",
+            "A potential market top",
+            "A period of high volatility",
+            "Increased market liquidity"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the CBOE Volatility Index (VIX) often referred to as?",
+        "options": [
+            "Fear index",
+            "Greed gauge",
+            "Momentum indicator",
+            "Liquidity measure"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a rising VIX typically indicate?",
+        "options": [
+            "Increasing market optimism",
+            "Rising investor fear",
+            "Decreasing volatility",
+            "A bullish market trend"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary implication of a high margin debt?",
+        "options": [
+            "Increased market stability",
+            "Potential market correction",
+            "Declining trading volumes",
+            "Stronger investor confidence"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does contrarian analysis aim to identify?",
+        "options": [
+            "Market equilibrium",
+            "Divergence between price and sentiment",
+            "Support and resistance levels",
+            "Consensus market sentiment"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a declining put/call ratio indicate?",
+        "options": [
+            "Increasing bullish sentiment",
+            "Increasing bearish sentiment",
+            "Neutral market conditions",
+            "Decreasing trading activity"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is a common contrarian signal in sentiment analysis?",
+        "options": [
+            "Extreme optimism or pessimism",
+            "Steady market sentiment",
+            "Low market volatility",
+            "High trading volume"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a spike in short interest often lead to?",
+        "options": [
+            "A sharp market decline",
+            "A short squeeze",
+            "Market consolidation",
+            "Increased trading volume"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'crowded trade' refer to?",
+        "options": [
+            "A market with high trading volume",
+            "A heavily favored trade by the majority",
+            "A trade with low risk",
+            "An illiquid market condition"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the general implication of insider buying?",
+        "options": [
+            "Bullish signal",
+            "Bearish signal",
+            "Neutral sentiment",
+            "Market consolidation"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "How is the VIX calculated?",
+        "options": [
+            "Based on historical volatility",
+            "Using option pricing models",
+            "By analyzing trading volume",
+            "From investor sentiment surveys"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'fear gauge' commonly refer to?",
+        "options": [
+            "Put/call ratio",
+            "Short interest",
+            "VIX",
+            "Margin debt"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does a low margin debt suggest about market sentiment?",
+        "options": [
+            "High investor confidence",
+            "Low investor confidence",
+            "High risk tolerance",
+            "Stable market conditions"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is indicated by declining insider buying?",
+        "options": [
+            "Bullish sentiment",
+            "Bearish sentiment",
+            "Stable market sentiment",
+            "Increased market volatility"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does an unusually high AAII bearish sentiment often predict?",
+        "options": [
+            "A market rally",
+            "A market correction",
+            "Increased volatility",
+            "Declining trading volumes"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the significance of insider selling in sentiment analysis?",
+        "options": [
+            "It always predicts a market top",
+            "It is a reliable bullish indicator",
+            "It may not always be sentiment-driven",
+            "It is irrelevant to sentiment analysis"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is one limitation of sentiment surveys?",
+        "options": [
+            "They rely heavily on technical indicators",
+            "They are influenced by external noise",
+            "They provide objective data",
+            "They focus exclusively on institutional investors"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a sharp rise in margin debt indicate?",
+        "options": [
+            "Strong bullish sentiment",
+            "Potential market overextension",
+            "A reduction in market volatility",
+            "Increased liquidity"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which of the following is a sentiment measure for options traders?",
+        "options": [
+            "Put/call ratio",
+            "Margin debt",
+            "Insider buying",
+            "AAII sentiment survey"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a high VIX often precede?",
+        "options": [
+            "A period of stability",
+            "A market rally",
+            "A market sell-off",
+            "Increased margin debt"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the role of contrarian indicators?",
+        "options": [
+            "To follow the majority opinion",
+            "To predict price levels",
+            "To identify sentiment extremes",
+            "To calculate volatility"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does declining short interest typically signal?",
+        "options": [
+            "Bearish sentiment",
+            "Bullish sentiment",
+            "Market volatility",
+            "Increased liquidity"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is indicated by low VIX levels?",
+        "options": [
+            "Increased market fear",
+            "Low market volatility",
+            "Market instability",
+            "Bullish sentiment"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary use of sentiment indicators?",
+        "options": [
+            "To predict exact price movements",
+            "To gauge market psychology",
+            "To confirm technical patterns",
+            "To calculate trading volume"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a contrarian investor typically look for?",
+        "options": [
+            "Consensus with the majority",
+            "High volatility periods",
+            "Extreme optimism or pessimism",
+            "Stable market conditions"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Which sentiment measure indicates the ratio of bearish to bullish options?",
+        "options": [
+            "Margin debt",
+            "Put/call ratio",
+            "Insider selling",
+            "Short interest"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does increased insider buying usually suggest?",
+        "options": [
+            "Bearish sentiment",
+            "Bullish sentiment",
+            "Neutral sentiment",
+            "Market volatility"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does high volatility imply about investor sentiment?",
+        "options": [
+            "High confidence",
+            "Fear or uncertainty",
+            "Market equilibrium",
+            "Stable sentiment"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does declining margin debt suggest about the market?",
+        "options": [
+            "Market optimism",
+            "Market caution or deleveraging",
+            "Increased liquidity",
+            "Stable trading activity"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the implication of low VIX levels in sentiment analysis?",
+        "options": [
+            "Market complacency",
+            "High market fear",
+            "Increasing volatility",
+            "Bearish sentiment"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the general interpretation of insider selling?",
+        "options": [
+            "Always bearish",
+            "Always bullish",
+            "Potential profit-taking",
+            "Market indecision"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is a limitation of the put/call ratio as a sentiment indicator?",
+        "options": [
+            "It is not widely tracked",
+            "It lacks historical data",
+            "It does not account for hedging activity",
+            "It is only applicable to individual stocks"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the common interpretation of a rising VIX during a market downturn?",
+        "options": [
+            "Increased market confidence",
+            "Heightened investor fear",
+            "Market stability",
+            "A short-term rally"
+        ],
+        "correctAnswer": 1
+    }
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
