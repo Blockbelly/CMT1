@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMT Topics Checklist</title>
+    <style>
+        :root {
+            --background-light: #f5f5f7;
+            --text-dark: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --accent-color: #007aff;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-family);
+            color: var(--text-dark);
+            background-color: var(--background-light);
+        }
+
+        header {
+            background-color: #fff;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 1px 5px var(--shadow-color);
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 30px;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 15px;
+            background-color: var(--background-light);
+            border-radius: 8px;
+            box-shadow: 0 2px 6px var(--shadow-color);
+        }
+
+        .checklist-item label {
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--shadow-color);
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CMT Level 1 Topics Checklist</h1>
+    </header>
+    <div class="container">
+        <!-- Section I -->
+        <h2 class="section-title">Section I: Theory and History of Technical Analysis</h2>
+        <ul class="checklist" id="section1">
+            <li class="checklist-item">
+                <label>The Basic Principle of Technical Analysis</label>
+                <input type="checkbox" data-id="topic1">
+            </li>
+            <li class="checklist-item">
+                <label>Dow Theory</label>
+                <input type="checkbox" data-id="topic2">
+            </li>
+            <li class="checklist-item">
+                <label>Introduction to Charts Part 1</label>
+                <input type="checkbox" data-id="topic3">
+            </li>
+            <li class="checklist-item">
+                <label>Introduction to Charts Part 2</label>
+                <input type="checkbox" data-id="topic4">
+            </li>
+        </ul>
+
+        <!-- Section II -->
+        <h2 class="section-title">Section II: Charts, Trends, and Patterns</h2>
+        <ul class="checklist" id="section2">
+            <li class="checklist-item">
+                <label>Trends — The Basics</label>
+                <input type="checkbox" data-id="topic5">
+            </li>
+            <li class="checklist-item">
+                <label>Breakouts, Stops, and Retracements</label>
+                <input type="checkbox" data-id="topic6">
+            </li>
+            <li class="checklist-item">
+                <label>Moving Averages</label>
+                <input type="checkbox" data-id="topic7">
+            </li>
+            <li class="checklist-item">
+                <label>Bar Chart Patterns</label>
+                <input type="checkbox" data-id="topic8">
+            </li>
+        </ul>
+
+        <!-- Section III -->
+        <h2 class="section-title">Section III: Advanced Concepts in Charting and Trend Analysis</h2>
+        <ul class="checklist" id="section3">
+            <li class="checklist-item">
+                <label>Introduction to the Wave Principle</label>
+                <input type="checkbox" data-id="topic9">
+            </li>
+            <li class="checklist-item">
+                <label>The Anatomy of Elliott Wave Trading</label>
+                <input type="checkbox" data-id="topic10">
+            </li>
+            <li class="checklist-item">
+                <label>Measuring Market Strength</label>
+                <input type="checkbox" data-id="topic11">
+            </li>
+            <li class="checklist-item">
+                <label>Foundations of Cycle Theory</label>
+                <input type="checkbox" data-id="topic12">
+            </li>
+        </ul>
+
+        <!-- Section IV -->
+        <h2 class="section-title">Section IV: Markets and Volatility</h2>
+        <ul class="checklist" id="section4">
+            <li class="checklist-item">
+                <label>Markets, Instruments, Data, and the Technical Analyst</label>
+                <input type="checkbox" data-id="topic13">
+            </li>
+            <li class="checklist-item">
+                <label>Equities</label>
+                <input type="checkbox" data-id="topic14">
+            </li>
+            <li class="checklist-item">
+                <label>Indexes</label>
+                <input type="checkbox" data-id="topic15">
+            </li>
+            <li class="checklist-item">
+                <label>Fixed Income/Bonds</label>
+                <input type="checkbox" data-id="topic16">
+            </li>
+        </ul>
+
+        <!-- Section V -->
+        <h2 class="section-title">Section V: Behavioral Finance and Other Theories</h2>
+        <ul class="checklist" id="section5">
+            <li class="checklist-item">
+                <label>What is the Efficient Market Hypothesis</label>
+                <input type="checkbox" data-id="topic17">
+            </li>
+            <li class="checklist-item">
+                <label>The Forerunners to Behavioral Finance</label>
+                <input type="checkbox" data-id="topic18">
+            </li>
+            <li class="checklist-item">
+                <label>Noise Traders and the Law of One Price</label>
+                <input type="checkbox" data-id="topic19">
+            </li>
+        </ul>
+
+        <!-- Section VI -->
+        <h2 class="section-title">Section VI: Basic Statistics for the Technical Analyst</h2>
+        <ul class="checklist" id="section6">
+            <li class="checklist-item">
+                <label>Introduction to Descriptive Statistics</label>
+                <input type="checkbox" data-id="topic20">
+            </li>
+            <li class="checklist-item">
+                <label>Introduction to Probability</label>
+                <input type="checkbox" data-id="topic21">
+            </li>
+        </ul>
+
+        <!-- Section VII -->
+        <h2 class="section-title">Section VII: Perspectives on Technical Trading Systems</h2>
+        <ul class="checklist" id="section7">
+            <li class="checklist-item">
+                <label>Objective Rules and Their Evaluation</label>
+                <input type="checkbox" data-id="topic22">
+            </li>
+            <li class="checklist-item">
+                <label>Being Right or Making Money</label>
+                <input type="checkbox" data-id="topic23">
+            </li>
+            <li class="checklist-item">
+                <label>The Model Building Process</label>
+                <input type="checkbox" data-id="topic24">
+            </li>
+            <li class="checklist-item">
+                <label>Relative Strength as a Criterion for Investment Selection</label>
+                <input type="checkbox" data-id="topic25">
+            </li>
+        </ul>
+
+        <!-- Section VIII -->
+        <h2 class="section-title">Section VIII: Ethics</h2>
+        <ul class="checklist" id="section8">
+            <li class="checklist-item">
+                <label>Standard 1 | Code of Ethics</label>
+                <input type="checkbox" data-id="ethics1">
+            </li>
+            <li class="checklist-item">
+                <label>Standard 2 | Code of Ethics</label>
+                <input type="checkbox" data-id="ethics2">
+            </li>
+            <li class="checklist-item">
+                <label>Standard 3 | Code of Ethics</label>
+                <input type="checkbox" data-id="ethics3">
+            </li>
+            <li class="checklist-item">
+                <label>Standard 4 | Code of Ethics</label>
+                <input type="checkbox" data-id="ethics4">
+            </li>
+        </ul>
+    </div>
+    <footer>
+        © 2024 CMT Checklist. All Rights Reserved.
+    </footer>
+
+    <script>
+        // Function to load checklist state from localStorage
+        function loadChecklist() {
+            document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+                const isChecked = localStorage.getItem(checkbox.dataset.id) === 'true';
+                checkbox.checked = isChecked;
+            });
+        }
+
+        // Function to save checklist state to localStorage
+        function saveChecklist(event) {
+            const checkbox = event.target;
+            localStorage.setItem(checkbox.dataset.id, checkbox.checked);
+        }
+
+        // Attach event listeners and initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChecklist();
+            document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+                checkbox.addEventListener('change', saveChecklist);
+            });
+        });
+    </script>
+</body>
+</html>
