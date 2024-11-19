@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indexes</title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Indexes (Ch 23) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+    <script>
+        const questions = 
+[
+    {
+        "question": "What are the four primary asset classes discussed in the chapter?",
+        "options": [
+            "Equities, FX, Futures, Options",
+            "Stocks, Bonds, Currencies, Commodities",
+            "Indexes, ETFs, Mutual Funds, Cash",
+            "Equities, Bonds, Derivatives, Real Estate"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which is NOT one of the five tradable instruments?",
+        "options": [
+            "Cash or Spot",
+            "Futures",
+            "Real Estate",
+            "Options"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does 'fungible' mean in market terms?",
+        "options": [
+            "Markets must have uniform assets",
+            "Markets must be free from manipulation and liquid",
+            "Markets must trade only in cash",
+            "Markets must involve international trades"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What are the two key requirements for technical trading markets?",
+        "options": [
+            "Liquidity and fungibility",
+            "Volatility and volume",
+            "Transparency and accessibility",
+            "Standardization and regulation"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Which of the following is NOT a focus area for technical analysts?",
+        "options": [
+            "Stock prices",
+            "Stock indexes",
+            "ETFs",
+            "Option prices"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "question": "What are the two most important data types for technical analysis?",
+        "options": [
+            "Price and volume",
+            "Price and open interest",
+            "Volume and bid-ask spreads",
+            "Volume and dividend payouts"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is a common issue that technical analysts face with data?",
+        "options": [
+            "High volume of trades",
+            "Bad ticks and late trades",
+            "Too much liquidity",
+            "Low volatility"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the priority in liquidation events?",
+        "options": [
+            "Shareholders, bondholders, government",
+            "Government, bondholders, shareholders",
+            "Bondholders, shareholders, government",
+            "Shareholders, government, bondholders"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which type of stock offers no voting rights but higher dividends?",
+        "options": [
+            "Preferred stock",
+            "Common stock",
+            "Restricted stock",
+            "Convertible stock"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What happens to the stock price near the ex-dividend date?",
+        "options": [
+            "It rises as investors buy for the dividend",
+            "It falls as dividends are paid",
+            "It remains stable",
+            "It becomes volatile due to uncertainty"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the purpose of a secondary offering?",
+        "options": [
+            "To dilute shareholder equity",
+            "To raise additional capital",
+            "To pay dividends",
+            "To issue corporate bonds"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the typical effect of restricted shares after the lockup period ends?",
+        "options": [
+            "Increased liquidity",
+            "Price declines as insiders sell",
+            "Higher dividends",
+            "Market stability"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a key characteristic of preferred stock?",
+        "options": [
+            "Offers voting rights",
+            "Pays fixed dividends at regular intervals",
+            "Higher risk than common stock",
+            "No capital gains potential"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the effect of a stock split on shareholder value?",
+        "options": [
+            "Increases shareholder value",
+            "Decreases shareholder value",
+            "No change in shareholder value",
+            "Increases market volatility"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the impact of a reverse split on stock price?",
+        "options": [
+            "Decreases price to attract more buyers",
+            "Increases price by reducing shares",
+            "Maintains price but increases volume",
+            "Makes the stock more volatile"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the purpose of issuing corporate bonds?",
+        "options": [
+            "To give investors ownership rights",
+            "To raise funds without giving up equity",
+            "To increase market liquidity",
+            "To pay dividends"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'market cap' refer to?",
+        "options": [
+            "Total outstanding shares",
+            "Total value of shares outstanding",
+            "Average daily trading volume",
+            "The highest price of the stock in 52 weeks"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which of the following is NOT a reason to buy stocks?",
+        "options": [
+            "Capital gains",
+            "Dividend income",
+            "Input into company management",
+            "Guaranteed returns"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "question": "What is a warrant in the context of stocks?",
+        "options": [
+            "A bond issued by a corporation",
+            "A company-issued right to buy shares at a fixed price",
+            "A third-party option on stock prices",
+            "A guaranteed dividend payment"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a unique characteristic of a warrant compared to an option?",
+        "options": [
+            "Issued by the company",
+            "Sold by a third party",
+            "Offers voting rights",
+            "Pays dividends"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the primary data needed to calculate market cap?",
+        "options": [
+            "Price and dividend",
+            "Shares outstanding and price",
+            "Volume and bid-ask spread",
+            "52-week high and low"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which is a corporate action that can dilute shareholder value?",
+        "options": [
+            "Stock splits",
+            "Secondary offerings",
+            "Ex-dividend dates",
+            "Lockup periods"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Why do companies issue preferred stock?",
+        "options": [
+            "To dilute equity further",
+            "To pay consistent dividends without voting rights",
+            "To create shareholder disputes",
+            "To increase liquidity in markets"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which market characteristic is essential for technical analysis?",
+        "options": [
+            "Market manipulation",
+            "High volatility",
+            "Fungibility",
+            "Uniform pricing"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does an IPO achieve for a company?",
+        "options": [
+            "Increases market liquidity",
+            "Allows public trading of its stock",
+            "Guarantees profitability",
+            "Eliminates debt obligations"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a reverse split typically indicate?",
+        "options": [
+            "Increased demand for shares",
+            "Compliance with exchange listing requirements",
+            "Improved company profitability",
+            "Reduced market liquidity"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the result of a stock split?",
+        "options": [
+            "More shares at a lower price",
+            "Fewer shares at a higher price",
+            "Higher dividends",
+            "Reduced shareholder value"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the purpose of a lockup period for restricted shares?",
+        "options": [
+            "To increase market liquidity",
+            "To prevent early selling by insiders",
+            "To dilute shareholder value",
+            "To allow dividend reinvestment"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the effect of X-dividend dates on stock prices?",
+        "options": [
+            "Sharp declines post-date",
+            "Sharp increases pre-date",
+            "Stabilization during the date",
+            "Unpredictable fluctuations"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does bid-ask spread represent?",
+        "options": [
+            "Liquidity in the market",
+            "Difference between buying and selling price",
+            "Market manipulation",
+            "Trading volume"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Why do technical analysts care about price and volume?",
+        "options": [
+            "They are reliable predictors of dividends",
+            "They form the basis for most technical indicators",
+            "They reduce market volatility",
+            "They explain corporate earnings"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary goal of a secondary offering?",
+        "options": [
+            "To increase shareholder value",
+            "To raise additional capital",
+            "To ensure voting rights for shareholders",
+            "To create dividends"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What are common data issues faced in technical analysis?",
+        "options": [
+            "Late trades and bad ticks",
+            "Low volume and high volatility",
+            "Manipulated prices",
+            "Bid-ask spreads"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a trendline break after a stock split indicate?",
+        "options": [
+            "A reversal in trend",
+            "Technical manipulation",
+            "Data inconsistency post-split",
+            "Market inefficiency"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does a corporate bond provide investors?",
+        "options": [
+            "Ownership rights",
+            "Fixed interest payments",
+            "Dividend payouts",
+            "Voting rights"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary function of ETFs?",
+        "options": [
+            "Provide direct company ownership",
+            "Track indexes or baskets of assets",
+            "Guarantee fixed returns",
+            "Increase corporate earnings"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which data type is least used in technical analysis?",
+        "options": [
+            "Price",
+            "Volume",
+            "Shares outstanding",
+            "Dividend announcements"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "question": "What happens to prices after a secondary offering?",
+        "options": [
+            "Prices rise due to increased demand",
+            "Prices fall due to shareholder dilution",
+            "Prices stabilize",
+            "Prices remain unpredictable"
+        ],
+        "correctAnswer": 1
+    }
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
