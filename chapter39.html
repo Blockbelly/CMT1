@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Intro to Statistics </title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Intro to Statistics (Ch 39)</h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+    <script>
+        const questions = [
+ 
+    {
+        "question": "Which of the following is NOT a measure of central tendency?",
+        "options": [
+            "Mean",
+            "Median",
+            "Mode",
+            "Range"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "question": "What does the mean represent in a data set?",
+        "options": [
+            "The most frequently occurring value",
+            "The middle value when arranged in order",
+            "The average of all the values",
+            "The difference between the highest and lowest values"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does the median represent?",
+        "options": [
+            "The most frequently occurring value",
+            "The average of all the values",
+            "The middle value in an ordered data set",
+            "The dispersion of the data"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Which central tendency measure is most affected by outliers?",
+        "options": [
+            "Mean",
+            "Median",
+            "Mode",
+            "Range"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a geometric mean account for that a simple mean does not?",
+        "options": [
+            "Scaling and compounding returns",
+            "Outliers",
+            "Total frequency",
+            "Correlation"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "How is variance calculated?",
+        "options": [
+            "By squaring the mean deviation",
+            "By summing the squared deviations from the mean",
+            "By finding the absolute differences from the mean",
+            "By dividing the highest and lowest values"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does standard deviation represent?",
+        "options": [
+            "The square root of the variance",
+            "The average return",
+            "The sum of squared deviations from the mean",
+            "The range of the data"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Which of the following is an advantage of using the geometric mean?",
+        "options": [
+            "It is less affected by outliers",
+            "It simplifies addition",
+            "It accounts for compounding over time",
+            "It uses absolute values"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does the term 'descriptive statistics' refer to?",
+        "options": [
+            "Drawing conclusions about a population based on a sample",
+            "Measuring and describing data without drawing conclusions",
+            "Using charts and graphs for visualization",
+            "Analyzing qualitative data"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What type of statistic is used when analyzing a complete population?",
+        "options": [
+            "Descriptive statistics",
+            "Inferential statistics",
+            "Population mean statistics",
+            "Geometric statistics"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the main difference between descriptive and inferential statistics?",
+        "options": [
+            "Descriptive statistics involve predictions, while inferential statistics summarize data.",
+            "Descriptive statistics summarize data, while inferential statistics draw conclusions about a population.",
+            "Inferential statistics use visualization techniques, while descriptive statistics do not.",
+            "Inferential statistics deal only with sample data, while descriptive statistics deal with qualitative data."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'range' represent?",
+        "options": [
+            "The average value of the data set",
+            "The middle value in an ordered data set",
+            "The difference between the highest and lowest values",
+            "The number of observations in the data set"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does the term 'probability distribution' represent?",
+        "options": [
+            "The average of observed values",
+            "The frequency of each value as a proportion of total observations",
+            "The range of data values",
+            "The difference between the mean and the median"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the key advantage of using standard deviation over variance?",
+        "options": [
+            "It is easier to calculate",
+            "It represents values on the same scale as the mean",
+            "It eliminates outliers",
+            "It accounts for population size"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which statistical measure is MOST commonly used to represent risk in finance?",
+        "options": [
+            "Range",
+            "Standard deviation",
+            "Mode",
+            "Median"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'frequency distribution' represent?",
+        "options": [
+            "The probability of an event occurring",
+            "The count of occurrences within specified ranges",
+            "The average return over a period",
+            "The difference between the highest and lowest values"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Why might a box and whisker plot be useful?",
+        "options": [
+            "It displays mean and mode",
+            "It shows dispersion, outliers, and range",
+            "It simplifies the calculation of probabilities",
+            "It measures correlation between variables"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the main drawback of relying solely on summary statistics?",
+        "options": [
+            "They are too complex to calculate",
+            "They may oversimplify the data and miss critical patterns",
+            "They cannot measure central tendency",
+            "They do not account for sample size"
+        ],
+        "correctAnswer": 1
+    },
+  
+[
+    {
+        "question": "Which of the following is NOT a measure of central tendency?",
+        "options": [
+            "Mean",
+            "Median",
+            "Mode",
+            "Range"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "question": "What does the mean represent in a data set?",
+        "options": [
+            "The most frequently occurring value",
+            "The middle value when arranged in order",
+            "The average of all the values",
+            "The difference between the highest and lowest values"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does the median represent?",
+        "options": [
+            "The most frequently occurring value",
+            "The average of all the values",
+            "The middle value in an ordered data set",
+            "The dispersion of the data"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Which central tendency measure is most affected by outliers?",
+        "options": [
+            "Mean",
+            "Median",
+            "Mode",
+            "Range"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a geometric mean account for that a simple mean does not?",
+        "options": [
+            "Scaling and compounding returns",
+            "Outliers",
+            "Total frequency",
+            "Correlation"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "How is variance calculated?",
+        "options": [
+            "By squaring the mean deviation",
+            "By summing the squared deviations from the mean",
+            "By finding the absolute differences from the mean",
+            "By dividing the highest and lowest values"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does standard deviation represent?",
+        "options": [
+            "The square root of the variance",
+            "The average return",
+            "The sum of squared deviations from the mean",
+            "The range of the data"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Which of the following is an advantage of using the geometric mean?",
+        "options": [
+            "It is less affected by outliers",
+            "It simplifies addition",
+            "It accounts for compounding over time",
+            "It uses absolute values"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does the term 'descriptive statistics' refer to?",
+        "options": [
+            "Drawing conclusions about a population based on a sample",
+            "Measuring and describing data without drawing conclusions",
+            "Using charts and graphs for visualization",
+            "Analyzing qualitative data"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What type of statistic is used when analyzing a complete population?",
+        "options": [
+            "Descriptive statistics",
+            "Inferential statistics",
+            "Population mean statistics",
+            "Geometric statistics"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the main difference between descriptive and inferential statistics?",
+        "options": [
+            "Descriptive statistics involve predictions, while inferential statistics summarize data.",
+            "Descriptive statistics summarize data, while inferential statistics draw conclusions about a population.",
+            "Inferential statistics use visualization techniques, while descriptive statistics do not.",
+            "Inferential statistics deal only with sample data, while descriptive statistics deal with qualitative data."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'range' represent?",
+        "options": [
+            "The average value of the data set",
+            "The middle value in an ordered data set",
+            "The difference between the highest and lowest values",
+            "The number of observations in the data set"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does the term 'probability distribution' represent?",
+        "options": [
+            "The average of observed values",
+            "The frequency of each value as a proportion of total observations",
+            "The range of data values",
+            "The difference between the mean and the median"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the key advantage of using standard deviation over variance?",
+        "options": [
+            "It is easier to calculate",
+            "It represents values on the same scale as the mean",
+            "It eliminates outliers",
+            "It accounts for population size"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which statistical measure is MOST commonly used to represent risk in finance?",
+        "options": [
+            "Range",
+            "Standard deviation",
+            "Mode",
+            "Median"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'frequency distribution' represent?",
+        "options": [
+            "The probability of an event occurring",
+            "The count of occurrences within specified ranges",
+            "The average return over a period",
+            "The difference between the highest and lowest values"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Why might a box and whisker plot be useful?",
+        "options": [
+            "It displays mean and mode",
+            "It shows dispersion, outliers, and range",
+            "It simplifies the calculation of probabilities",
+            "It measures correlation between variables"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the main drawback of relying solely on summary statistics?",
+        "options": [
+            "They are too complex to calculate",
+            "They may oversimplify the data and miss critical patterns",
+            "They cannot measure central tendency",
+            "They do not account for sample size"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which calculation is preferred for compounding returns?",
+        "options": [
+            "Arithmetic mean",
+            "Geometric mean",
+            "Median",
+            "Mode"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "How is the geometric mean different from the arithmetic mean?",
+        "options": [
+            "It uses addition instead of multiplication",
+            "It is more affected by outliers",
+            "It accounts for the compounding nature of returns",
+            "It requires the data to be normalized"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is a 'lottery trade' as mentioned in the transcript?",
+        "options": [
+            "A trade with a guaranteed return",
+            "A trade that benefits from unforeseen favorable events",
+            "A low-risk, low-return trade",
+            "A type of trading simulation"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which measure of central tendency is often used to avoid the influence of outliers?",
+        "options": [
+            "Mean",
+            "Median",
+            "Mode",
+            "Geometric mean"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the purpose of adding 1 to percentages in geometric mean calculations?",
+        "options": [
+            "To simplify addition",
+            "To normalize the data",
+            "To ensure the results remain positive",
+            "To account for compounding effects"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "question": "Which term describes data summarization using visuals like charts?",
+        "options": [
+            "Inferential statistics",
+            "Descriptive statistics",
+            "Data visualization",
+            "Data modeling"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does the term 'scatter plot' represent?",
+        "options": [
+            "A plot showing dispersion",
+            "A plot measuring the correlation between two variables",
+            "A plot of frequency distribution",
+            "A plot showing probability density"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which component is NOT included in a box and whisker plot?",
+        "options": [
+            "Mean",
+            "Median",
+            "Outliers",
+            "Standard deviation"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "question": "What is an example of descriptive statistics?",
+        "options": [
+            "Calculating a sample variance",
+            "Performing hypothesis testing",
+            "Summarizing data using a mean",
+            "Predicting future returns based on sample data"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does the term 'sample' refer to?",
+        "options": [
+            "The entire population being studied",
+            "A subset of the population used for analysis",
+            "A single data point",
+            "A visual representation of data"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which measure is described as the 'square root of variance'?",
+        "options": [
+            "Mean",
+            "Standard deviation",
+            "Median",
+            "Range"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the difference between population and sample variance?",
+        "options": [
+            "Population variance includes a correction factor of n-1.",
+            "Sample variance divides by n, not n-1.",
+            "Sample variance is always smaller.",
+            "Population variance applies to all data points."
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "question": "Which statistical concept is MOST associated with risk measurement in portfolios?",
+        "options": [
+            "Variance",
+            "Median",
+            "Mode",
+            "Range"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the primary purpose of using regression lines?",
+        "options": [
+            "To identify correlations",
+            "To measure central tendency",
+            "To visualize outliers",
+            "To summarize dispersion"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Which type of visualization is used to measure correlation?",
+        "options": [
+            "Scatter plot",
+            "Box and whisker plot",
+            "Frequency distribution",
+            "Histogram"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Why is standard deviation preferred over variance in practical applications?",
+        "options": [
+            "It is easier to interpret because it shares the same scale as the mean.",
+            "It eliminates the influence of outliers.",
+            "It requires fewer data points.",
+            "It is less computationally intensive."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the key feature of a probability distribution?",
+        "options": [
+            "It sums to more than 1",
+            "It shows relative likelihoods of outcomes",
+            "It always uses geometric mean",
+            "It depends only on descriptive statistics"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which visualization helps detect outliers and the range of data?",
+        "options": [
+            "Box and whisker plot",
+            "Scatter plot",
+            "Histogram",
+            "Probability distribution"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What term is used for the most frequently occurring value in a dataset?",
+        "options": [
+            "Mean",
+            "Median",
+            "Mode",
+            "Range"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Which visualization uses bins to represent the frequency of returns?",
+        "options": [
+            "Box and whisker plot",
+            "Histogram",
+            "Scatter plot",
+            "Probability distribution"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which measure of risk considers both positive and negative outliers equally?",
+        "options": [
+            "Variance",
+            "Range",
+            "Geometric mean",
+            "Mean deviation"
+        ],
+        "correctAnswer": 0
+    }
+]
+
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "Index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
