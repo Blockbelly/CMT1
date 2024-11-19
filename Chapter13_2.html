@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Basic Oscillators</title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Basic Oscillators (Ch 13.2) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+    <script>
+        const questions = [
+    {
+        question: "What does the momentum indicator measure in technical analysis?",
+        options: [
+            "Speed of price movements",
+            "Difference between today's price and the price 10 periods ago",
+            "The rate of price change over time",
+            "Average price over a period"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Which of the following is true about the momentum indicator?",
+        options: [
+            "It is lagging compared to moving averages.",
+            "It provides earlier signals than moving averages.",
+            "It calculates an exponential average of prices.",
+            "It uses only closing prices for calculation."
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "What does the slope of the momentum line indicate?",
+        options: [
+            "The stability of the trend",
+            "The speed of price changes",
+            "The volume of trades",
+            "The range of price movements"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Momentum is considered a:",
+        options: [
+            "Trend indicator",
+            "Volume indicator",
+            "Volatility indicator",
+            "Market sentiment indicator"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "Momentum is more responsive than moving averages because:",
+        options: [
+            "It includes all historical data",
+            "It has less lag",
+            "It uses exponential weighting",
+            "It filters out false signals"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "The MACD histogram represents:",
+        options: [
+            "The difference between MACD and the signal line",
+            "The average price over time",
+            "The sum of MACD and the signal line",
+            "The difference between two moving averages"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "Which are the standard periods used in MACD?",
+        options: [
+            "12, 26, and 9",
+            "10, 20, and 5",
+            "14, 28, and 7",
+            "15, 30, and 10"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "A positive MACD value indicates:",
+        options: [
+            "A downtrend",
+            "An uptrend",
+            "Market indecision",
+            "High volatility"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "What does a MACD crossover above the zero line signify?",
+        options: [
+            "A continuation of the downtrend",
+            "A signal to sell",
+            "A potential upward trend",
+            "Neutral market conditions"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "Divergence in MACD occurs when:",
+        options: [
+            "The histogram crosses zero",
+            "The price makes higher highs while MACD makes lower highs",
+            "MACD and the signal line overlap",
+            "Price and MACD move in the same direction"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "The RSI typically uses a look-back period of:",
+        options: [
+            "10",
+            "14",
+            "20",
+            "30"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Which RSI value indicates an overbought condition?",
+        options: [
+            "Above 70",
+            "Below 30",
+            "Above 50",
+            "Below 20"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "Which RSI signal suggests a potential trend reversal?",
+        options: [
+            "RSI above 50",
+            "RSI crossing below 70",
+            "RSI crossing above 30",
+            "Both B and C"
+        ],
+        correctAnswer: 3
+    },
+    {
+        question: "RSI uses which values for calculation?",
+        options: [
+            "Only today's closing price",
+            "All closing prices in the look-back period",
+            "Highs and lows of the look-back period",
+            "Moving averages of closing prices"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Stability in RSI comes at the cost of:",
+        options: [
+            "Increased sensitivity",
+            "Increased lag",
+            "Reduced accuracy",
+            "Reduced reliability"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "The stochastic oscillator uses which prices for its calculation?",
+        options: [
+            "Closing prices only",
+            "High, low, and closing prices",
+            "Average prices over time",
+            "Weighted prices"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "A fast stochastic is represented by:",
+        options: [
+            "%K only",
+            "%K and %D",
+            "%D and a moving average of %D",
+            "A single moving average"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "What does a stochastic value near 100 indicate?",
+        options: [
+            "Overbought conditions",
+            "Oversold conditions",
+            "Neutral market conditions",
+            "No significant trend"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "What is the difference between fast and slow stochastic?",
+        options: [
+            "The use of exponential averages",
+            "The smoothing of %D using a moving average",
+            "The calculation of %K",
+            "The range of look-back periods"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "The slow stochastic typically uses how many parameters?",
+        options: [
+            "Two",
+            "Three",
+            "Four",
+            "Five"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "What does the CCI primarily measure?",
+        options: [
+            "Price momentum",
+            "Overbought and oversold levels",
+            "Market cycles",
+            "Volatility"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Most CCI values lie within:",
+        options: [
+            "-50 to 50",
+            "-100 to 100",
+            "0 to 100",
+            "-200 to 200"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Values of CCI above 100 often indicate:",
+        options: [
+            "Strong trends",
+            "Cycles turning points",
+            "Price reversals",
+            "Market indecision"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "The CCI is not bounded, meaning:",
+        options: [
+            "It can reach very high or low values",
+            "It provides limited data",
+            "It measures only recent trends",
+            "It uses a fixed scale"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "The CCI is often used in combination with:",
+        options: [
+            "MACD",
+            "RSI",
+            "Cycle analysis",
+            "Bollinger Bands"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "What does ADX stand for?",
+        options: [
+            "Average Directional Index",
+            "Average Daily Index",
+            "All-Directional Index",
+            "Advanced Directional Index"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "The ADX measures:",
+        options: [
+            "The strength of a trend",
+            "The direction of price movements",
+            "Price volatility",
+            "Moving average crossovers"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "A rising ADX indicates:",
+        options: [
+            "A strong trend, regardless of direction",
+            "An uptrend",
+            "A downtrend",
+            "Increased volatility"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "When ADX is below 20, it often indicates:",
+        options: [
+            "A strong trend",
+            "A weak or non-trending market",
+            "Overbought conditions",
+            "Oversold conditions"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "The green line in ADX represents:",
+        options: [
+            "Trend direction",
+            "Trend strength",
+            "Volume changes",
+            "Moving average divergence"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Oscillators are most useful in:",
+        options: [
+            "Trending markets",
+            "Range-bound markets",
+            "High-volatility markets",
+            "Low-liquidity markets"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Overbought conditions suggest:",
+        options: [
+            "Continued upward movement",
+            "A potential price correction downward",
+            "Neutral market sentiment",
+            "High trading volume"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Oversold conditions indicate:",
+        options: [
+            "A potential upward price reversal",
+            "Market indecision",
+            "Strengthening of a downtrend",
+            "Consolidation"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "Divergence occurs when:",
+        options: [
+            "Price and the indicator move in the same direction",
+            "Price moves in one direction while the indicator moves in another",
+            "Two indicators give conflicting signals",
+            "Price is range-bound"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Oscillators are less effective in:",
+        options: [
+            "Strongly trending markets",
+            "Sideways markets",
+            "Volatile markets",
+            "Low-volume markets"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "Which RSI level is generally considered as indicating oversold conditions?",
+        options: [
+            "Above 70",
+            "Below 30",
+            "Between 40 and 50",
+            "Above 50"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "What is the main difference between Williams %R and Stochastic?",
+        options: [
+            "Williams %R uses highs and lows, while Stochastic uses only closing prices.",
+            "Williams %R measures from the high down, while Stochastic measures from the low up.",
+            "Williams %R is a leading indicator, while Stochastic is a lagging indicator.",
+            "There is no difference; they are the same."
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "A stochastic value of 20 indicates:",
+        options: [
+            "An uptrend is forming",
+            "An overbought condition",
+            "An oversold condition",
+            "Price is at its highest in the look-back period"
+        ],
+        correctAnswer: 2
+    },
+    {
+        question: "MACD signals a trend reversal when:",
+        options: [
+            "The MACD line crosses above the signal line",
+            "The MACD histogram crosses above zero",
+            "The MACD histogram turns negative",
+            "Both A and B"
+        ],
+        correctAnswer: 3
+    },
+    {
+        question: "Which of the following is true for ADX?",
+        options: [
+            "It indicates the direction of the trend",
+            "It measures the strength of the trend",
+            "It determines overbought and oversold levels",
+            "It predicts future price movement"
+        ],
+        correctAnswer: 1
+    },
+
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "Index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
