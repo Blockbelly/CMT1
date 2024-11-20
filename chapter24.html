@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Fixed Income / Bonds </title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Fixed Income / Bonds (Ch 24) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+	<div id="review-section" style="display: none; margin-top: 20px;">
+
+</div>
+
+    <script>
+        const questions = [
+    {
+        "question": "What is the primary purpose of a bond?",
+        "options": [
+            "To raise funds for issuers by borrowing from investors",
+            "To guarantee capital growth",
+            "To provide shareholders with voting rights",
+            "To trade equity in the secondary market"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the inverse relationship in bond markets?",
+        "options": [
+            "Price and volume",
+            "Price and yield",
+            "Yield and duration",
+            "Coupon rate and face value"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the yield curve represent?",
+        "options": [
+            "The relationship between bond prices and volume",
+            "The relationship between bond yields and maturities",
+            "The overall credit rating of bonds",
+            "The average interest rate of bonds"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What are bills in the context of bonds?",
+        "options": [
+            "Bonds with maturities of up to one year",
+            "Bonds with variable interest rates",
+            "Bonds backed by corporate entities",
+            "Bonds with no maturity date"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Which type of bond pays no periodic interest?",
+        "options": [
+            "Callable bond",
+            "Convertible bond",
+            "Zero-coupon bond",
+            "High-yield bond"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does the term 'par value' refer to?",
+        "options": [
+            "The market price of a bond",
+            "The nominal or face value of a bond",
+            "The coupon rate of a bond",
+            "The yield to maturity of a bond"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary purpose of the yield-to-maturity calculation?",
+        "options": [
+            "To determine the bond's price",
+            "To estimate total returns over the life of the bond",
+            "To calculate the bond's duration",
+            "To measure the bond's risk"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of the US 10-year Treasury bond in the bond market?",
+        "options": [
+            "It acts as the benchmark for other bonds",
+            "It is used to calculate par value",
+            "It determines the coupon rate of corporate bonds",
+            "It is the only risk-free bond available"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does an inverted yield curve typically indicate?",
+        "options": [
+            "A bullish market trend",
+            "Economic stability",
+            "A potential recession",
+            "Higher bond prices across maturities"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What are the two primary types of bond issuers?",
+        "options": [
+            "Governments and corporations",
+            "Municipalities and central banks",
+            "Individual investors and institutions",
+            "Hedge funds and credit unions"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does the term 'callable bond' mean?",
+        "options": [
+            "A bond that pays variable interest rates",
+            "A bond that can be redeemed by the issuer before maturity",
+            "A bond with a guaranteed high yield",
+            "A bond that is convertible into equity"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the importance of bond ratings?",
+        "options": [
+            "They determine the bond's market price",
+            "They reflect the credit risk of the issuer",
+            "They guarantee the bond's yield",
+            "They standardize the bond's maturity date"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which type of bond is typically issued by municipalities?",
+        "options": [
+            "Convertible bonds",
+            "Corporate bonds",
+            "Municipal bonds",
+            "High-yield bonds"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the coupon rate of a bond?",
+        "options": [
+            "The bond's interest payment as a percentage of its face value",
+            "The market yield of the bond",
+            "The percentage difference between price and par value",
+            "The bond's duration"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the primary risk associated with junk bonds?",
+        "options": [
+            "High price volatility",
+            "Higher likelihood of default",
+            "Low returns compared to investment-grade bonds",
+            "Reduced liquidity in the market"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does 'duration' measure in the context of bonds?",
+        "options": [
+            "The time to maturity",
+            "The sensitivity of bond prices to changes in interest rates",
+            "The yield of a bond compared to others",
+            "The historical performance of a bond"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary purpose of Treasury Inflation-Protected Securities (TIPS)?",
+        "options": [
+            "To offer fixed returns regardless of inflation",
+            "To adjust returns based on inflation rates",
+            "To guarantee higher yields than corporate bonds",
+            "To reduce market volatility"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a bond trading at a premium mean?",
+        "options": [
+            "It is trading above its par value",
+            "It offers a higher yield than similar bonds",
+            "It is considered riskier than other bonds",
+            "It has a lower coupon rate than its face value"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Which of the following is a key feature of convertible bonds?",
+        "options": [
+            "They can be redeemed early by the issuer",
+            "They can be converted into equity at a pre-set rate",
+            "They have no fixed maturity date",
+            "They are only issued by corporations"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does 'yield to maturity' include?",
+        "options": [
+            "Only the coupon payments",
+            "All income and capital gains over the bond's life",
+            "Only the principal repayment",
+            "The historical market price of the bond"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the face value of most bonds?",
+        "options": [
+            "$10",
+            "$100",
+            "$1,000",
+            "$10,000"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does an inverted yield curve imply about short-term rates?",
+        "options": [
+            "Short-term rates are lower than long-term rates",
+            "Short-term rates are higher than long-term rates",
+            "Short-term rates are stable",
+            "Short-term rates are unpredictable"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of auctions in bond markets?",
+        "options": [
+            "To set bond prices for secondary markets",
+            "To sell bonds directly to retail investors",
+            "To create liquidity for corporate bonds",
+            "To provide guaranteed yields for all investors"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the 'risk-free rate' often associated with?",
+        "options": [
+            "Corporate bonds",
+            "Treasury bonds",
+            "Municipal bonds",
+            "High-yield bonds"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which bond component represents periodic interest payments?",
+        "options": [
+            "Face value",
+            "Coupon",
+            "Yield",
+            "Duration"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the significance of 'credit spread' in bond markets?",
+        "options": [
+            "It reflects the yield difference between risk-free and corporate bonds",
+            "It measures the bond's maturity period",
+            "It determines the bond's par value",
+            "It calculates the bond's annual return"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the role of bond duration in portfolio management?",
+        "options": [
+            "To maximize dividends",
+            "To manage interest rate risk",
+            "To ensure liquidity",
+            "To calculate the coupon rate"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a callable bond's primary disadvantage to the investor?",
+        "options": [
+            "Reduced principal payment",
+            "Loss of future interest income",
+            "Increased duration",
+            "Decreased liquidity"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What happens to bond prices when interest rates rise?",
+        "options": [
+            "Bond prices increase",
+            "Bond prices decrease",
+            "Bond prices remain stable",
+            "Bond prices become volatile"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a bond rating of 'AA' typically imply?",
+        "options": [
+            "High risk of default",
+            "Moderate risk and high return",
+            "Low risk of default",
+            "Uncertain yield to maturity"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Which bonds typically have higher yields due to higher risk?",
+        "options": [
+            "Investment-grade bonds",
+            "Municipal bonds",
+            "Junk bonds",
+            "Government bonds"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the primary purpose of the yield curve in analysis?",
+        "options": [
+            "To predict bond default rates",
+            "To track interest rate trends over different maturities",
+            "To compare bond prices across issuers",
+            "To calculate bond dividends"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a bond's maturity refer to?",
+        "options": [
+            "The time until the bond is callable",
+            "The time until the principal is repaid",
+            "The average yield over the bond's life",
+            "The duration of the bond's coupon payments"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a bond yield above the risk-free rate imply?",
+        "options": [
+            "Higher credit quality",
+            "Higher risk compared to risk-free securities",
+            "A guaranteed return on investment",
+            "A discounted bond price"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the significance of bond liquidity in the market?",
+        "options": [
+            "Ensures high coupon rates",
+            "Facilitates ease of buying and selling",
+            "Determines bond maturity",
+            "Reduces credit spread"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'bid-ask spread' represent in bond trading?",
+        "options": [
+            "Difference between buying and selling prices",
+            "The yield difference between two bonds",
+            "The bond's duration",
+            "The coupon rate of the bond"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is a high-yield bond also referred to as?",
+        "options": [
+            "Investment-grade bond",
+            "Zero-coupon bond",
+            "Junk bond",
+            "Convertible bond"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the primary risk in long-duration bonds?",
+        "options": [
+            "Low coupon payments",
+            "High interest rate sensitivity",
+            "Low credit ratings",
+            "High default probability"
+        ],
+        "correctAnswer": 1
+    },
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
