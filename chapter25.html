@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Futures </title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Futures (Ch 25) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+	<div id="review-section" style="display: none; margin-top: 20px;">
+
+</div>
+
+    <script>
+        const questions = [
+    {
+        "question": "What is the primary purpose of a futures contract?",
+        "options": [
+            "To hedge against price volatility",
+            "To guarantee profit in trading",
+            "To eliminate market risks",
+            "To invest in equities"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Where did the concept of futures originate?",
+        "options": [
+            "Dutch tulip markets",
+            "London stock exchange",
+            "American agricultural markets",
+            "Japanese rice markets"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Who are the primary participants in futures markets?",
+        "options": [
+            "Only producers and consumers",
+            "Speculators, producers, and hedgers",
+            "Government regulators",
+            "Retail investors exclusively"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'maturity' in a futures contract mean?",
+        "options": [
+            "The length of the contract",
+            "The date when the contract ceases",
+            "The age of the asset",
+            "The start date of the contract"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What happens at the maturity of a futures contract?",
+        "options": [
+            "The contract is automatically extended",
+            "Goods must be delivered or settled in cash",
+            "It transitions into an options contract",
+            "It becomes invalid"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of speculators in futures markets?",
+        "options": [
+            "To take physical delivery of goods",
+            "To provide liquidity to the market",
+            "To stabilize long-term prices",
+            "To reduce volatility in stocks"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does open interest measure?",
+        "options": [
+            "The daily number of trades",
+            "The number of outstanding contracts",
+            "The trading volume of an asset",
+            "The total profits of traders"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does 'volume' represent in futures trading?",
+        "options": [
+            "Number of outstanding contracts",
+            "Number of contracts traded in a day",
+            "Total market capitalization",
+            "The average price movement"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the 'front month' in futures trading?",
+        "options": [
+            "The longest maturity date",
+            "The most recent or nearest delivery month",
+            "The least traded contract",
+            "The most expensive contract"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a continuous contract in futures?",
+        "options": [
+            "A contract that never expires",
+            "A synthetic price combining all contracts",
+            "A contract for immediate delivery",
+            "A futures contract extended every quarter"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the 'settlement price' in futures?",
+        "options": [
+            "The agreed price at the start of the contract",
+            "The official final price of the day",
+            "The lowest price traded in a day",
+            "The average price over the contract period"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the Commitment of Traders (COT) report show?",
+        "options": [
+            "Only the volume of futures traded",
+            "Breakdown of open interest by trader types",
+            "The daily settlement price",
+            "The average contract price"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does contango in futures markets indicate?",
+        "options": [
+            "Future prices are lower than spot prices",
+            "Future prices are higher than spot prices",
+            "An absence of market liquidity",
+            "The market is in equilibrium"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does backwardation mean?",
+        "options": [
+            "Spot prices are higher than future prices",
+            "Future prices are higher than spot prices",
+            "There is high market volatility",
+            "Trading volume is decreasing"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the main purpose of hedging with futures?",
+        "options": [
+            "To ensure maximum profit",
+            "To lock in prices and reduce risk",
+            "To eliminate trading commissions",
+            "To diversify into equities"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the basis in futures markets?",
+        "options": [
+            "The relationship between futures and spot prices",
+            "The fundamental value of the underlying asset",
+            "The average price across all contracts",
+            "The total profit made by traders"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does an active month in futures trading represent?",
+        "options": [
+            "The nearest maturity contract",
+            "The contract with the highest trading volume",
+            "The most expensive contract",
+            "The longest duration contract"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of margin in futures trading?",
+        "options": [
+            "To eliminate the need for physical delivery",
+            "To ensure traders meet their financial obligations",
+            "To calculate daily profits",
+            "To predict price movements"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary challenge with continuous futures charts?",
+        "options": [
+            "Adjusting for contract rollovers",
+            "Handling extreme volatility",
+            "Eliminating speculator influence",
+            "Calculating open interest"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does rolling over a futures contract involve?",
+        "options": [
+            "Closing and opening a position in a new contract",
+            "Transferring physical goods",
+            "Merging contracts into one",
+            "Cancelling the original contract"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What are agricultural futures primarily used for?",
+        "options": [
+            "Tracking real estate markets",
+            "Managing price risks for farmers",
+            "Predicting weather patterns",
+            "Speculating on equity prices"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What type of futures contracts are based on indexes?",
+        "options": [
+            "Commodity futures",
+            "Equity index futures",
+            "Currency futures",
+            "Interest rate futures"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What are foreign exchange futures used for?",
+        "options": [
+            "Managing interest rate risk",
+            "Speculating on currency price movements",
+            "Tracking equity performance",
+            "Hedging commodity prices"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What do metals futures include?",
+        "options": [
+            "Only precious metals like gold and silver",
+            "Precious and industrial metals like copper and zinc",
+            "Equity and commodity-based metals",
+            "Metals linked exclusively to ETFs"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary difference between volume and open interest?",
+        "options": [
+            "Volume measures activity; open interest measures outstanding contracts",
+            "Open interest reflects price changes; volume reflects value",
+            "Volume only applies to equities; open interest applies to futures",
+            "Open interest changes daily; volume remains constant"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a synthetic continuous contract represent?",
+        "options": [
+            "The sum of all futures prices",
+            "A single price combining multiple contracts",
+            "The average spot price of an asset",
+            "A future contract with no expiration"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a margin call require traders to do?",
+        "options": [
+            "Deposit additional funds to cover potential losses",
+            "Increase their trading volume",
+            "Roll over their contracts",
+            "Close their current positions"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the role of speculators in the futures market?",
+        "options": [
+            "To stabilize prices",
+            "To provide liquidity",
+            "To eliminate delivery risk",
+            "To predict stock prices"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which type of futures contract allows for cash settlement?",
+        "options": [
+            "All futures contracts",
+            "Some futures contracts, depending on the agreement",
+            "Only commodity-based contracts",
+            "Only equity futures"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the purpose of the Commitment of Traders (COT) report?",
+        "options": [
+            "To predict future price movements",
+            "To classify trader types and analyze open interest",
+            "To calculate the settlement price",
+            "To provide historical price trends"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does contango suggest about futures prices?",
+        "options": [
+            "Future prices are lower than spot prices",
+            "Future prices are higher than spot prices",
+            "The market is in equilibrium",
+            "Prices are highly volatile"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is backwardation in futures markets?",
+        "options": [
+            "Spot prices are higher than future prices",
+            "Future prices are higher than spot prices",
+            "There is increased liquidity",
+            "There is reduced trading activity"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is an example of hedging with futures?",
+        "options": [
+            "A farmer locking in wheat prices for the harvest",
+            "A trader speculating on currency fluctuations",
+            "An investor buying index futures for profit",
+            "A company issuing new stock to investors"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does the term 'basis' refer to in futures?",
+        "options": [
+            "The difference between futures and spot prices",
+            "The fundamental value of the underlying asset",
+            "The average daily trading volume",
+            "The total number of outstanding contracts"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a large open interest indicate?",
+        "options": [
+            "High market activity",
+            "Large number of outstanding contracts",
+            "Stable market prices",
+            "High trading volume"
+        ],
+        "correctAnswer": 1
+    },
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
