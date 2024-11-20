@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Model Building Process</title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I -Model Building Process (Ch 43) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+    <script>
+        const questions = 
+[
+    {
+        "question": "What is the primary purpose of building a timing model?",
+        "options": [
+            "To predict future price trends",
+            "To combine inputs for a weight of evidence approach",
+            "To analyze historical data trends",
+            "To create trading algorithms"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a critical requirement for the data used in model building?",
+        "options": [
+            "It should be highly volatile",
+            "It should be accurate and clean",
+            "It must include only historical prices",
+            "It should exclude revisions"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What role do sentiment indicators play in models?",
+        "options": [
+            "They provide trading signals",
+            "They identify extreme optimism or pessimism",
+            "They track earnings growth",
+            "They determine stock valuations"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What happens when all advisors have the same market opinion?",
+        "options": [
+            "The market enters a strong bullish trend",
+            "A reversal is likely to occur",
+            "The market becomes less volatile",
+            "Trading volume increases"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the significance of valuation indicators like PE ratios?",
+        "options": [
+            "They only measure company profits",
+            "They reflect sentiment and optimism",
+            "They predict future earnings growth",
+            "They are used exclusively for dividend stocks"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "How do rising interest rates impact stock prices?",
+        "options": [
+            "Stock prices tend to increase",
+            "Stock prices tend to decrease",
+            "Stock prices remain stable",
+            "Stock prices fluctuate unpredictably"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What are the two primary tools used by the Federal Reserve to control the economy?",
+        "options": [
+            "Money supply and bond yields",
+            "Short-term interest rates and money supply",
+            "Equity prices and bond purchases",
+            "Tax policies and trade regulations"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does an inverted yield curve typically indicate?",
+        "options": [
+            "Economic stability",
+            "An upcoming recession",
+            "Strong equity performance",
+            "Rising interest rates"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of economic indicators in model building?",
+        "options": [
+            "To directly signal buy or sell actions",
+            "To provide data on market conditions",
+            "To measure stock volatility",
+            "To calculate dividend payouts"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the significance of 52-week lows in breadth measures?",
+        "options": [
+            "They indicate market tops",
+            "They are predictive of market declines",
+            "They confirm bullish sentiment",
+            "They show increasing liquidity"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the importance of using multiple moving averages?",
+        "options": [
+            "To increase market volatility",
+            "To reduce sensitivity to price fluctuations",
+            "To capture trends at different timeframes",
+            "To predict economic indicators"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the benefit of using momentum indicators in models?",
+        "options": [
+            "They ensure stable market conditions",
+            "They measure the rate of price changes",
+            "They calculate stock dividends",
+            "They reduce trading volume"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary advantage of a weight of evidence approach?",
+        "options": [
+            "It simplifies model complexity",
+            "It combines multiple indicators for confirmation",
+            "It eliminates the need for data revisions",
+            "It focuses only on price data"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a key risk in over-optimizing a model?",
+        "options": [
+            "It improves historical performance",
+            "It reduces future reliability",
+            "It eliminates curve fitting",
+            "It increases consistency in all market conditions"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a common issue with models that rely on few large wins?",
+        "options": [
+            "They perform consistently across conditions",
+            "They are unlikely to replicate future success",
+            "They provide high sensitivity to market trends",
+            "They reduce the need for optimization"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of breadth thrust in model building?",
+        "options": [
+            "It confirms bullish momentum when thresholds are met",
+            "It tracks all market participants equally",
+            "It signals the start of a bearish trend",
+            "It measures dividend payouts"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does Ned Davis suggest about investment-grade stocks?",
+        "options": [
+            "They include all market stocks",
+            "They should meet specific investment criteria",
+            "They are excluded from model building",
+            "They do not respond to economic indicators"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of quantitative easing in stock markets?",
+        "options": [
+            "It reduces market liquidity",
+            "It increases money supply and market confidence",
+            "It limits investor participation",
+            "It stabilizes short-term price fluctuations"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the slope of a moving average indicate?",
+        "options": [
+            "Market momentum",
+            "Volatility levels",
+            "Investor sentiment",
+            "Trading volume"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Why is it important to test models against historical data?",
+        "options": [
+            "To eliminate bad inputs",
+            "To ensure incremental gains over time",
+            "To optimize for maximum returns",
+            "To reduce the need for future adjustments"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "How are monetary policies used in model building?",
+        "options": [
+            "As direct trading indicators",
+            "As contextual data for long-term trends",
+            "To calculate short-term moving averages",
+            "To optimize risk-reward ratios"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a common feature of models using multiple indicators?",
+        "options": [
+            "They avoid using price data",
+            "They rely on a single signal for trading",
+            "They require confirmation across indicators",
+            "They include only historical price trends"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the impact of reduced money supply on stocks?",
+        "options": [
+            "It is positive for stock prices",
+            "It has no impact on stock prices",
+            "It is negative for stock prices",
+            "It increases stock price stability"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is curve fitting in model building?",
+        "options": [
+            "Testing models with historical data",
+            "Optimizing parameters to fit past data exactly",
+            "Combining different types of indicators",
+            "Reducing the need for monetary inputs"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of economic surveys in models?",
+        "options": [
+            "To calculate moving averages",
+            "To track investment-grade stocks",
+            "To provide insights into market sentiment",
+            "To predict trading volume"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the risk of path-dependent models?",
+        "options": [
+            "They cannot adapt to new market conditions",
+            "They eliminate randomness in trends",
+            "They simplify inputs and outputs",
+            "They guarantee consistent profits"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the benefit of using investment-grade stocks in models?",
+        "options": [
+            "They reduce the need for breadth measures",
+            "They limit the impact of economic shocks",
+            "They align with specific investment criteria",
+            "They eliminate all market risks"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does a breadth measure divide?",
+        "options": [
+            "Highs by moving averages",
+            "Lows by the total number of stocks",
+            "Volume by price movements",
+            "Sentiment indicators by valuations"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the purpose of using momentum thrusts in models?",
+        "options": [
+            "To identify long-term trends",
+            "To capture short-term performance expectations",
+            "To stabilize equity portfolios",
+            "To optimize model diversity"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "How can external indicators be used in models?",
+        "options": [
+            "By focusing only on price data",
+            "By applying momentum techniques",
+            "By ignoring sentiment changes",
+            "By excluding moving averages"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the importance of three-dimensional yield curves?",
+        "options": [
+            "They track historical price changes",
+            "They analyze short-term and long-term rate relationships",
+            "They predict stock performance",
+            "They stabilize model outputs"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the significance of moving average crossing points?",
+        "options": [
+            "They signal momentum thrusts",
+            "They indicate potential trend reversals",
+            "They stabilize price volatility",
+            "They limit model variability"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a key consideration when setting variable lengths for indicators?",
+        "options": [
+            "Optimizing for the best profit historically",
+            "Aligning with rational and purposeful inputs",
+            "Reducing all market risks",
+            "Focusing exclusively on technical indicators"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the weight of evidence approach require?",
+        "options": [
+            "Fewer indicators for simplicity",
+            "Confirmation across multiple types of indicators",
+            "Focusing only on price-driven signals",
+            "Reducing the use of external data sources"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a major advantage of using breadth thrust in models?",
+        "options": [
+            "It measures price stability",
+            "It confirms bullish market conditions",
+            "It identifies underperforming stocks",
+            "It limits market volatility"
+        ],
+        "correctAnswer": 1
+    }
+];
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
