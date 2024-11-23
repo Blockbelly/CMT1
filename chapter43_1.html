@@ -1,0 +1,521 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Model Building </title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Model Building (Ch 43) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+	<div id="review-section" style="display: none; margin-top: 20px;">
+
+</div>
+
+    <script>
+        const questions = [
+    {
+        "question": "What is the primary purpose of the model-building process in technical analysis?",
+        "options": [
+            "To predict future price trends",
+            "To create a systematic and objective trading strategy",
+            "To eliminate the need for fundamental analysis",
+            "To develop manual trading strategies"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the first step in the model-building process?",
+        "options": [
+            "Backtesting the strategy",
+            "Defining the objective of the model",
+            "Optimizing parameters for performance",
+            "Analyzing historical data"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Why is it important to use clean and accurate data in model building?",
+        "options": [
+            "To ensure higher returns",
+            "To avoid errors in testing and evaluation",
+            "To create visually appealing charts",
+            "To eliminate the need for backtesting"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is overfitting in the context of model building?",
+        "options": [
+            "Creating a model that performs well only on historical data but poorly in real markets",
+            "A model that focuses on long-term trends",
+            "Using too many indicators in a single model",
+            "Creating a model that adapts to all market conditions"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is a key feature of a robust trading model?",
+        "options": [
+            "It generates 100% accurate predictions",
+            "It performs well across different market conditions",
+            "It uses subjective rules for decision-making",
+            "It avoids backtesting to reduce bias"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary goal of backtesting a model?",
+        "options": [
+            "To optimize for future market trends",
+            "To evaluate the model's performance using historical data",
+            "To eliminate the need for forward testing",
+            "To ensure maximum profit in all trades"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'walk-forward analysis' refer to?",
+        "options": [
+            "Using real-time data to test a model",
+            "Dividing historical data into in-sample and out-of-sample sets for testing",
+            "Adjusting parameters for better historical performance",
+            "Analyzing market trends in hindsight"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Why is it important to separate in-sample and out-of-sample data in model testing?",
+        "options": [
+            "To increase the complexity of the model",
+            "To avoid overfitting and ensure robust performance",
+            "To ensure 100% accuracy in historical data",
+            "To test multiple strategies simultaneously"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of a weight-of-evidence approach in model building?",
+        "options": [
+            "To rely solely on one indicator for signals",
+            "To combine multiple indicators to confirm signals",
+            "To reduce the complexity of the model",
+            "To prioritize subjective interpretation"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Why is parameter optimization a critical step in model building?",
+        "options": [
+            "To guarantee profitability in future markets",
+            "To find the best parameter values for maximizing historical performance",
+            "To simplify the model's structure",
+            "To focus on reducing backtesting errors"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the drawback of over-optimizing a model?",
+        "options": [
+            "It may fail to perform well in real-world markets",
+            "It simplifies the strategy too much",
+            "It eliminates subjectivity in decision-making",
+            "It reduces the model's historical accuracy"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the importance of using economic indicators in model building?",
+        "options": [
+            "To create a trend-following strategy",
+            "To provide additional context for market conditions",
+            "To eliminate the need for technical indicators",
+            "To analyze trading volume trends"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which of the following is NOT typically included in the model evaluation process?",
+        "options": [
+            "Performance metrics like CAGR and Sharpe ratio",
+            "Subjective interpretation of historical charts",
+            "Maximum drawdown and risk metrics",
+            "Profitability across different market conditions"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the purpose of a sensitivity analysis in model building?",
+        "options": [
+            "To evaluate how changes in parameters affect model performance",
+            "To test the model's historical profitability",
+            "To eliminate indicators with low predictive power",
+            "To simplify the model's structure"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the key goal of forward testing?",
+        "options": [
+            "To validate the model's performance in live markets",
+            "To optimize parameters for historical data",
+            "To analyze market trends in hindsight",
+            "To compare multiple strategies simultaneously"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does the term 'maximum drawdown' refer to?",
+        "options": [
+            "The highest return a model can achieve",
+            "The largest percentage drop from a peak to a trough in the portfolio's value",
+            "The average risk in a trading strategy",
+            "The time taken for a strategy to recover losses"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of diversification in model design?",
+        "options": [
+            "To eliminate market risks entirely",
+            "To spread risk across multiple strategies and asset classes",
+            "To maximize returns from one market sector",
+            "To focus only on low-volatility assets"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Why is it important to evaluate both long and short strategies in a model?",
+        "options": [
+            "To optimize for high-frequency trading",
+            "To ensure the model performs in different market trends",
+            "To prioritize long-term investments",
+            "To simplify model parameters"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the purpose of a Monte Carlo simulation in model testing?",
+        "options": [
+            "To create real-time market conditions",
+            "To evaluate the model under different hypothetical scenarios",
+            "To optimize parameter settings",
+            "To eliminate subjectivity from the model"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Why is it important to monitor live performance after deploying a model?",
+        "options": [
+            "To predict future market trends",
+            "To ensure the model adapts to real-time conditions",
+            "To eliminate drawdowns",
+            "To reduce transaction costs"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the Sharpe ratio measure in trading models?",
+        "options": [
+            "The accuracy of signals",
+            "The risk-adjusted return of a model",
+            "The maximum drawdown",
+            "The average win rate"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the significance of CAGR in evaluating trading models?",
+        "options": [
+            "It measures the total return of a model",
+            "It represents the compound annual growth rate of returns",
+            "It calculates maximum drawdown",
+            "It analyzes live market performance"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Why should models be stress-tested under different market conditions?",
+        "options": [
+            "To identify their limitations and strengths",
+            "To ensure they perform consistently in all conditions",
+            "To avoid using multiple indicators",
+            "To prioritize one market type"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a weight-of-evidence approach avoid?",
+        "options": [
+            "Reliance on a single indicator",
+            "Combining multiple metrics",
+            "Testing in out-of-sample data",
+            "Subjective evaluations"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does the term 'alpha' signify in trading models?",
+        "options": [
+            "The portion of returns above a benchmark's performance",
+            "The maximum drawdown of a portfolio",
+            "The average win rate of a strategy",
+            "The volatility of returns"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Why should models use both economic and technical indicators?",
+        "options": [
+            "To predict short-term trends",
+            "To provide a holistic understanding of market dynamics",
+            "To avoid reliance on subjective rules",
+            "To ensure higher backtesting accuracy"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the main purpose of using out-of-sample data in model testing?",
+        "options": [
+            "To focus on historical optimization",
+            "To validate the model's robustness in unseen conditions",
+            "To improve parameter settings",
+            "To prioritize subjective inputs"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does parameter sensitivity reveal about a model?",
+        "options": [
+            "Its accuracy in live markets",
+            "Its dependence on specific parameter values",
+            "Its maximum profitability",
+            "Its ability to generate alpha"
+        ],
+        "correctAnswer": 1
+    }
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
