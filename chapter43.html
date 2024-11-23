@@ -1,9 +1,11 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Model Building Process</title>
+    <title> Model Building </title>
     <style>
         :root {
             --bg-primary: #f4f7fb;
@@ -135,7 +137,7 @@
     </style>
 </head>
 <body>
-    <h1>CMT Level I -Model Building Process (Ch 43) </h1>
+    <h1>CMT Level I - Model Building (Ch 43) </h1>
    <br>	
 <br>
     <div class="quiz-container" id="quiz"></div>
@@ -147,359 +149,349 @@
         <button onclick="skipQuestion()">Skip</button>
     </div>
     <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+	<div id="review-section" style="display: none; margin-top: 20px;">
+
+</div>
+
     <script>
         const questions = [
     {
-        "question": "What is the primary purpose of building a timing model?",
+        "question": "What is the primary purpose of the model-building process in technical analysis?",
         "options": [
             "To predict future price trends",
-            "To combine inputs for a weight of evidence approach",
-            "To analyze historical data trends",
-            "To create trading algorithms"
+            "To create a systematic and objective trading strategy",
+            "To eliminate the need for fundamental analysis",
+            "To develop manual trading strategies"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What is a critical requirement for the data used in model building?",
+        "question": "What is the first step in the model-building process?",
         "options": [
-            "It should be highly volatile",
-            "It should be accurate and clean",
-            "It must include only historical prices",
-            "It should exclude revisions"
+            "Backtesting the strategy",
+            "Defining the objective of the model",
+            "Optimizing parameters for performance",
+            "Analyzing historical data"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What role do sentiment indicators play in models?",
+        "question": "Why is it important to use clean and accurate data in model building?",
         "options": [
-            "They provide trading signals",
-            "They identify extreme optimism or pessimism",
-            "They track earnings growth",
-            "They determine stock valuations"
+            "To ensure higher returns",
+            "To avoid errors in testing and evaluation",
+            "To create visually appealing charts",
+            "To eliminate the need for backtesting"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What happens when all advisors have the same market opinion?",
+        "question": "What is overfitting in the context of model building?",
         "options": [
-            "The market enters a strong bullish trend",
-            "A reversal is likely to occur",
-            "The market becomes less volatile",
-            "Trading volume increases"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is the significance of valuation indicators like PE ratios?",
-        "options": [
-            "They only measure company profits",
-            "They reflect sentiment and optimism",
-            "They predict future earnings growth",
-            "They are used exclusively for dividend stocks"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "How do rising interest rates impact stock prices?",
-        "options": [
-            "Stock prices tend to increase",
-            "Stock prices tend to decrease",
-            "Stock prices remain stable",
-            "Stock prices fluctuate unpredictably"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What are the two primary tools used by the Federal Reserve to control the economy?",
-        "options": [
-            "Money supply and bond yields",
-            "Short-term interest rates and money supply",
-            "Equity prices and bond purchases",
-            "Tax policies and trade regulations"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What does an inverted yield curve typically indicate?",
-        "options": [
-            "Economic stability",
-            "An upcoming recession",
-            "Strong equity performance",
-            "Rising interest rates"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is the role of economic indicators in model building?",
-        "options": [
-            "To directly signal buy or sell actions",
-            "To provide data on market conditions",
-            "To measure stock volatility",
-            "To calculate dividend payouts"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is the significance of 52-week lows in breadth measures?",
-        "options": [
-            "They indicate market tops",
-            "They are predictive of market declines",
-            "They confirm bullish sentiment",
-            "They show increasing liquidity"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is the importance of using multiple moving averages?",
-        "options": [
-            "To increase market volatility",
-            "To reduce sensitivity to price fluctuations",
-            "To capture trends at different timeframes",
-            "To predict economic indicators"
-        ],
-        "correctAnswer": 2
-    },
-    {
-        "question": "What is the benefit of using momentum indicators in models?",
-        "options": [
-            "They ensure stable market conditions",
-            "They measure the rate of price changes",
-            "They calculate stock dividends",
-            "They reduce trading volume"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is the primary advantage of a weight of evidence approach?",
-        "options": [
-            "It simplifies model complexity",
-            "It combines multiple indicators for confirmation",
-            "It eliminates the need for data revisions",
-            "It focuses only on price data"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is a key risk in over-optimizing a model?",
-        "options": [
-            "It improves historical performance",
-            "It reduces future reliability",
-            "It eliminates curve fitting",
-            "It increases consistency in all market conditions"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is a common issue with models that rely on few large wins?",
-        "options": [
-            "They perform consistently across conditions",
-            "They are unlikely to replicate future success",
-            "They provide high sensitivity to market trends",
-            "They reduce the need for optimization"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is the role of breadth thrust in model building?",
-        "options": [
-            "It confirms bullish momentum when thresholds are met",
-            "It tracks all market participants equally",
-            "It signals the start of a bearish trend",
-            "It measures dividend payouts"
+            "Creating a model that performs well only on historical data but poorly in real markets",
+            "A model that focuses on long-term trends",
+            "Using too many indicators in a single model",
+            "Creating a model that adapts to all market conditions"
         ],
         "correctAnswer": 0
     },
     {
-        "question": "What does Ned Davis suggest about investment-grade stocks?",
+        "question": "What is a key feature of a robust trading model?",
         "options": [
-            "They include all market stocks",
-            "They should meet specific investment criteria",
-            "They are excluded from model building",
-            "They do not respond to economic indicators"
+            "It generates 100% accurate predictions",
+            "It performs well across different market conditions",
+            "It uses subjective rules for decision-making",
+            "It avoids backtesting to reduce bias"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What is the role of quantitative easing in stock markets?",
+        "question": "What is the primary goal of backtesting a model?",
         "options": [
-            "It reduces market liquidity",
-            "It increases money supply and market confidence",
-            "It limits investor participation",
-            "It stabilizes short-term price fluctuations"
+            "To optimize for future market trends",
+            "To evaluate the model's performance using historical data",
+            "To eliminate the need for forward testing",
+            "To ensure maximum profit in all trades"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What does the slope of a moving average indicate?",
+        "question": "What does the term 'walk-forward analysis' refer to?",
         "options": [
-            "Market momentum",
-            "Volatility levels",
-            "Investor sentiment",
-            "Trading volume"
+            "Using real-time data to test a model",
+            "Dividing historical data into in-sample and out-of-sample sets for testing",
+            "Adjusting parameters for better historical performance",
+            "Analyzing market trends in hindsight"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Why is it important to separate in-sample and out-of-sample data in model testing?",
+        "options": [
+            "To increase the complexity of the model",
+            "To avoid overfitting and ensure robust performance",
+            "To ensure 100% accuracy in historical data",
+            "To test multiple strategies simultaneously"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of a weight-of-evidence approach in model building?",
+        "options": [
+            "To rely solely on one indicator for signals",
+            "To combine multiple indicators to confirm signals",
+            "To reduce the complexity of the model",
+            "To prioritize subjective interpretation"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Why is parameter optimization a critical step in model building?",
+        "options": [
+            "To guarantee profitability in future markets",
+            "To find the best parameter values for maximizing historical performance",
+            "To simplify the model's structure",
+            "To focus on reducing backtesting errors"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the drawback of over-optimizing a model?",
+        "options": [
+            "It may fail to perform well in real-world markets",
+            "It simplifies the strategy too much",
+            "It eliminates subjectivity in decision-making",
+            "It reduces the model's historical accuracy"
         ],
         "correctAnswer": 0
     },
     {
-        "question": "Why is it important to test models against historical data?",
+        "question": "What is the importance of using economic indicators in model building?",
         "options": [
-            "To eliminate bad inputs",
-            "To ensure incremental gains over time",
-            "To optimize for maximum returns",
-            "To reduce the need for future adjustments"
+            "To create a trend-following strategy",
+            "To provide additional context for market conditions",
+            "To eliminate the need for technical indicators",
+            "To analyze trading volume trends"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "How are monetary policies used in model building?",
+        "question": "Which of the following is NOT typically included in the model evaluation process?",
         "options": [
-            "As direct trading indicators",
-            "As contextual data for long-term trends",
-            "To calculate short-term moving averages",
-            "To optimize risk-reward ratios"
+            "Performance metrics like CAGR and Sharpe ratio",
+            "Subjective interpretation of historical charts",
+            "Maximum drawdown and risk metrics",
+            "Profitability across different market conditions"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What is a common feature of models using multiple indicators?",
+        "question": "What is the purpose of a sensitivity analysis in model building?",
         "options": [
-            "They avoid using price data",
-            "They rely on a single signal for trading",
-            "They require confirmation across indicators",
-            "They include only historical price trends"
-        ],
-        "correctAnswer": 2
-    },
-    {
-        "question": "What is the impact of reduced money supply on stocks?",
-        "options": [
-            "It is positive for stock prices",
-            "It has no impact on stock prices",
-            "It is negative for stock prices",
-            "It increases stock price stability"
-        ],
-        "correctAnswer": 2
-    },
-    {
-        "question": "What is curve fitting in model building?",
-        "options": [
-            "Testing models with historical data",
-            "Optimizing parameters to fit past data exactly",
-            "Combining different types of indicators",
-            "Reducing the need for monetary inputs"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is the role of economic surveys in models?",
-        "options": [
-            "To calculate moving averages",
-            "To track investment-grade stocks",
-            "To provide insights into market sentiment",
-            "To predict trading volume"
-        ],
-        "correctAnswer": 2
-    },
-    {
-        "question": "What is the risk of path-dependent models?",
-        "options": [
-            "They cannot adapt to new market conditions",
-            "They eliminate randomness in trends",
-            "They simplify inputs and outputs",
-            "They guarantee consistent profits"
+            "To evaluate how changes in parameters affect model performance",
+            "To test the model's historical profitability",
+            "To eliminate indicators with low predictive power",
+            "To simplify the model's structure"
         ],
         "correctAnswer": 0
     },
     {
-        "question": "What is the benefit of using investment-grade stocks in models?",
+        "question": "What is the key goal of forward testing?",
         "options": [
-            "They reduce the need for breadth measures",
-            "They limit the impact of economic shocks",
-            "They align with specific investment criteria",
-            "They eliminate all market risks"
+            "To validate the model's performance in live markets",
+            "To optimize parameters for historical data",
+            "To analyze market trends in hindsight",
+            "To compare multiple strategies simultaneously"
         ],
-        "correctAnswer": 2
+        "correctAnswer": 0
     },
     {
-        "question": "What does a breadth measure divide?",
+        "question": "What does the term 'maximum drawdown' refer to?",
         "options": [
-            "Highs by moving averages",
-            "Lows by the total number of stocks",
-            "Volume by price movements",
-            "Sentiment indicators by valuations"
+            "The highest return a model can achieve",
+            "The largest percentage drop from a peak to a trough in the portfolio's value",
+            "The average risk in a trading strategy",
+            "The time taken for a strategy to recover losses"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What is the purpose of using momentum thrusts in models?",
+        "question": "What is the role of diversification in model design?",
         "options": [
-            "To identify long-term trends",
-            "To capture short-term performance expectations",
-            "To stabilize equity portfolios",
-            "To optimize model diversity"
+            "To eliminate market risks entirely",
+            "To spread risk across multiple strategies and asset classes",
+            "To maximize returns from one market sector",
+            "To focus only on low-volatility assets"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "How can external indicators be used in models?",
+        "question": "Why is it important to evaluate both long and short strategies in a model?",
         "options": [
-            "By focusing only on price data",
-            "By applying momentum techniques",
-            "By ignoring sentiment changes",
-            "By excluding moving averages"
+            "To optimize for high-frequency trading",
+            "To ensure the model performs in different market trends",
+            "To prioritize long-term investments",
+            "To simplify model parameters"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What is the importance of three-dimensional yield curves?",
+        "question": "What is the purpose of a Monte Carlo simulation in model testing?",
         "options": [
-            "They track historical price changes",
-            "They analyze short-term and long-term rate relationships",
-            "They predict stock performance",
-            "They stabilize model outputs"
+            "To create real-time market conditions",
+            "To evaluate the model under different hypothetical scenarios",
+            "To optimize parameter settings",
+            "To eliminate subjectivity from the model"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What is the significance of moving average crossing points?",
+        "question": "Why is it important to monitor live performance after deploying a model?",
         "options": [
-            "They signal momentum thrusts",
-            "They indicate potential trend reversals",
-            "They stabilize price volatility",
-            "They limit model variability"
+            "To predict future market trends",
+            "To ensure the model adapts to real-time conditions",
+            "To eliminate drawdowns",
+            "To reduce transaction costs"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What is a key consideration when setting variable lengths for indicators?",
+        "question": "What does the Sharpe ratio measure in trading models?",
         "options": [
-            "Optimizing for the best profit historically",
-            "Aligning with rational and purposeful inputs",
-            "Reducing all market risks",
-            "Focusing exclusively on technical indicators"
+            "The accuracy of signals",
+            "The risk-adjusted return of a model",
+            "The maximum drawdown",
+            "The average win rate"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What does the weight of evidence approach require?",
+        "question": "What is the significance of CAGR in evaluating trading models?",
         "options": [
-            "Fewer indicators for simplicity",
-            "Confirmation across multiple types of indicators",
-            "Focusing only on price-driven signals",
-            "Reducing the use of external data sources"
+            "It measures the total return of a model",
+            "It represents the compound annual growth rate of returns",
+            "It calculates maximum drawdown",
+            "It analyzes live market performance"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What is a major advantage of using breadth thrust in models?",
+        "question": "Why should models be stress-tested under different market conditions?",
         "options": [
-            "It measures price stability",
-            "It confirms bullish market conditions",
-            "It identifies underperforming stocks",
-            "It limits market volatility"
+            "To identify their limitations and strengths",
+            "To ensure they perform consistently in all conditions",
+            "To avoid using multiple indicators",
+            "To prioritize one market type"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a weight-of-evidence approach avoid?",
+        "options": [
+            "Reliance on a single indicator",
+            "Combining multiple metrics",
+            "Testing in out-of-sample data",
+            "Subjective evaluations"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does the term 'alpha' signify in trading models?",
+        "options": [
+            "The portion of returns above a benchmark's performance",
+            "The maximum drawdown of a portfolio",
+            "The average win rate of a strategy",
+            "The volatility of returns"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Why should models use both economic and technical indicators?",
+        "options": [
+            "To predict short-term trends",
+            "To provide a holistic understanding of market dynamics",
+            "To avoid reliance on subjective rules",
+            "To ensure higher backtesting accuracy"
         ],
         "correctAnswer": 1
     },
+    {
+        "question": "What is the main purpose of using out-of-sample data in model testing?",
+        "options": [
+            "To focus on historical optimization",
+            "To validate the model's robustness in unseen conditions",
+            "To improve parameter settings",
+            "To prioritize subjective inputs"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does parameter sensitivity reveal about a model?",
+        "options": [
+            "Its accuracy in live markets",
+            "Its dependence on specific parameter values",
+            "Its maximum profitability",
+            "Its ability to generate alpha"
+        ],
+        "correctAnswer": 1
+    }
 ];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
 
         const previousQuestion = () => {
             if (currentQuestionIndex > 0) {
