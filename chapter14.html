@@ -149,152 +149,206 @@
     <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
     <script>
         const questions = [
-   {
-            question: "What does a candlestick represent in a financial chart?",
-            options: [
-                "Opening price only",
-                "Closing price only",
-                "Opening, closing, high, and low prices",
-                "Average price"
-            ],
-            answer: 2
-        },
-        {
-            question: "In a candlestick chart, what does a green (or white) candle indicate?",
-            options: [
-                "Price decrease",
-                "Price increase",
-                "No change in price",
-                "Market indecision"
-            ],
-            answer: 1
-        },
-        {
-            question: "What do the wicks (or shadows) of a candlestick represent?",
-            options: [
-                "The opening price",
-                "The closing price",
-                "The high and low prices during the period",
-                "The average price"
-            ],
-            answer: 2
-        },
-        {
-            question: "Which part of the candlestick shows the opening price?",
-            options: [
-                "The body",
-                "The upper shadow",
-                "The lower shadow",
-                "It varies based on the color of the candle"
-            ],
-            answer: 0
-        },
-        {
-            question: "What is the primary purpose of using candlestick charts?",
-            options: [
-                "To predict future prices based on historical averages",
-                "To visualize price movements over time",
-                "To assess company fundamentals",
-                "To calculate moving averages"
-            ],
-            answer: 1
-        },
-        {
-            question: "How many price points does each candlestick typically represent?",
-            options: ["One", "Two", "Four", "Eight"],
-            answer: 2
-        },
-        {
-            question: "What does a red (or black) candle signify?",
-            options: ["Bullish sentiment", "Bearish sentiment", "Market consolidation", "High volatility"],
-            answer: 1
-        },
-        {
-            question: "Which of the following is NOT a component of a candlestick?",
-            options: ["Body", "Shadow", "Volume bar", "Open and close prices"],
-            answer: 2
-        },
-        {
-            question: "How can you identify a bullish reversal pattern in candlesticks?",
-            options: ["By looking for a series of red candles", "By observing a hammer or engulfing pattern after a downtrend", "By analyzing volume trends only", "By using moving averages"],
-            answer: 1
-        },
-        {
-            question: "What is the significance of the length of the candlestick body?",
-            options: ["It indicates market volatility.", "It shows the strength of buying or selling pressure.", "It represents the time frame.", "It has no significance."],
-            answer: 1
-        },
-        {
-            question: "What is a 'Doji' candlestick pattern indicative of?",
-            options: ["Strong trend continuation", "Market indecision or reversal potential", "High volatility period", "A confirmed bullish trend"],
-            answer: 1
-        },
-        {
-            question: "Which pattern is characterized by two consecutive candles where the second engulfs the first?",
-            options: ["Morning Star", "Evening Star", "Engulfing Pattern", "Shooting Star"],
-            answer: 2
-        },
-        {
-            question: "What does a 'Hammer' candlestick indicate when found at the bottom of a downtrend?",
-            options: ["Continuation of the downtrend", "Potential reversal to an uptrend", "Market indecision", "Increased selling pressure"],
-            answer: 1
-        },
-        {
-            question: "A 'Shooting Star' pattern typically appears at which point in a trend?",
-            options: ["At market bottom", "At market top", "During sideways movement", "At random points"],
-            answer: 1
-        },
-        {
-            question: "'Evening Star' pattern suggests what?",
-            options: ["Bullish reversal", "Bearish reversal", "Continuation pattern", "Indecision"],
-            answer: 1
-        },
-        {
-            question: "Which candlestick pattern consists of three candles and indicates potential reversal after an uptrend?",
-            options: ["Three White Soldiers", "Three Black Crows", "Morning Star", "Evening Star"],
-            answer: 3
-        },
-        {
-            question: "What is indicated by a 'Bullish Engulfing' pattern?",
-            options: ["Strong selling pressure", "Weak buying pressure", "Strong buying pressure that may lead to upward movement", "Market consolidation"],
-            answer: 2
-        },
-        {
-            question: "Which candlestick formation typically indicates that sellers are gaining control after an uptrend?",
-            options: ["Bullish Harami", "Bearish Harami", "Morning Star", "Hammer"],
-            answer: 1
-        },
-        {
-            question: "What is the implication of a 'Spinning Top' candlestick pattern?",
-            options: ["Strong trend continuation", "Indecision in the market with potential for reversal", "Confirmation of trend strength", "High volatility"],
-            answer: 1
-        },
-        {
-            question: "The 'Piercing Line' pattern occurs in which context?",
-            options: ["At market tops indicating bearish reversal", "At market bottoms indicating bullish reversal", "In sideways markets indicating consolidation", "None of the above"],
-            answer: 1
-        },
-        {
-            question: "Which of these factors can enhance the reliability of candlestick patterns?",
-            options: ["Volume confirmation", "Time frame consistency", "Confluence with other technical indicators", "All of the above"],
-            answer: 3
-        },
-        {
-            question: "What does it mean if a candle closes significantly higher than its open with high volume?",
-            options: ["Strong bullish sentiment likely to continue", "Weak bullish sentiment likely to reverse", "Market indecision", "Bearish sentiment"],
-            answer: 0
-        },
-        {
-            question: "How can traders utilize candlesticks in conjunction with support and resistance levels?",
-            options: ["To confirm breakout points", "To identify potential reversals at key levels confirmed by specific patterns", "To gauge market sentiment", "All of the above"],
-            answer: 3
-        },
-        {
-            question: "In technical analysis, what does it mean when there are consecutive long red candles followed by a long green candle?",
-            options: ["A continuation of the bearish trend", "A strong signal for a reversal to the upside", "A sign of consolidation", "A confirmation of market uncertainty"],
-            answer: 1
-        }
-
+    {
+        "question": "What is the key difference between candlestick charts and bar charts?",
+        "options": [
+            "Candlestick charts do not show volume",
+            "Candlestick charts use solid or hollow bodies to represent the relationship between the open and close",
+            "Bar charts only show the high and low prices",
+            "Bar charts are only used for intraday trading"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a hollow candlestick body indicate?",
+        "options": [
+            "The close was higher than the open",
+            "The close was lower than the open",
+            "The market is consolidating",
+            "The volume was high during the session"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does a solid candlestick body indicate?",
+        "options": [
+            "The close was higher than the open",
+            "The close was lower than the open",
+            "The market trend is uncertain",
+            "The market has low volume"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the term used to describe the lines extending from the body of a candlestick?",
+        "options": [
+            "Wicks",
+            "Tails",
+            "Shadows",
+            "Spires"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What information does the body of a candlestick convey?",
+        "options": [
+            "The high and low prices",
+            "The opening and closing prices",
+            "The volume of trades",
+            "The intraday price fluctuations"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a Doji candlestick pattern indicate?",
+        "options": [
+            "A strong bullish trend",
+            "A strong bearish trend",
+            "Market indecision or equilibrium between buyers and sellers",
+            "High trading volume"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Why is the first hour of trading considered important in candlestick analysis?",
+        "options": [
+            "It reflects the closing price trends",
+            "It sets the tone for the trading day",
+            "It determines the volume for the entire day",
+            "It identifies support and resistance levels"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a 'shaven head' candlestick pattern?",
+        "options": [
+            "A candle with no lower shadow",
+            "A candle with no upper shadow",
+            "A candle with a very short body",
+            "A Doji candle with equal wicks"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary limitation of candlestick charts?",
+        "options": [
+            "They do not indicate market volume",
+            "They require waiting for the close to confirm the candle formation",
+            "They cannot show intraday price movements",
+            "They do not include support and resistance levels"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the relationship between candlesticks and support or resistance levels?",
+        "options": [
+            "Candlesticks automatically calculate support and resistance levels",
+            "The close of a candlestick relative to these levels is critical for confirmation",
+            "The wicks of candlesticks define support and resistance zones",
+            "Support and resistance are irrelevant in candlestick charts"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a key strength of candlestick charts?",
+        "options": [
+            "They are exclusively used for day trading",
+            "They clearly depict potential market reversals",
+            "They eliminate the need for other technical indicators",
+            "They show price targets for trading strategies"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What do the upper and lower shadows of a candlestick indicate?",
+        "options": [
+            "The opening and closing prices",
+            "The highest and lowest prices of the trading session",
+            "The average price movements",
+            "The volume traded during the session"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the significance of long shadows on a candlestick?",
+        "options": [
+            "They indicate strong buyer or seller activity during the session",
+            "They show low market volume",
+            "They represent indecision in the market",
+            "They define the opening and closing prices"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Why do many analysts prefer candlestick charts over bar charts?",
+        "options": [
+            "They include volume information",
+            "They simplify the identification of market patterns and trends",
+            "They are easier to program into trading algorithms",
+            "They are more accurate for calculating price targets"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a long hollow body in a candlestick indicate?",
+        "options": [
+            "Strong bearish sentiment",
+            "Strong bullish sentiment",
+            "Market consolidation",
+            "High volatility with no trend"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "How can candlesticks be used within chart patterns like ascending triangles?",
+        "options": [
+            "To calculate the volume at each price level",
+            "To identify continuation signals faster than bar charts",
+            "To define exact support and resistance levels",
+            "To predict the time to breakout"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the Japanese term for a trading range defined by clear support and resistance?",
+        "options": [
+            "Kagi",
+            "Box trading",
+            "Renko",
+            "Ichimoku"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a primary benefit of combining candlestick analysis with Western technical indicators?",
+        "options": [
+            "It eliminates the need for support and resistance",
+            "It confirms candlestick patterns using additional tools like RSI and moving averages",
+            "It simplifies the identification of price targets",
+            "It avoids reliance on volume data"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a candlestick with a very short body and long shadows suggest?",
+        "options": [
+            "Strong bullish or bearish sentiment",
+            "Indecision in the market",
+            "A continuation of the current trend",
+            "High trading volume"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a major limitation of candlestick patterns for price targets?",
+        "options": [
+            "They do not consider volume trends",
+            "They cannot provide specific price projections",
+            "They are ineffective for identifying support levels",
+            "They require multiple indicators for confirmation"
+        ],
+        "correctAnswer": 1
+    }
 ];
 
 
