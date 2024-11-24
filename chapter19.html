@@ -1,0 +1,526 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Foundations of Market Cycle</title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Foundations of Market Cycle (Ch 19)</h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="location.href='index.html'">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+    <script>
+        const questions = [
+    {
+        "question": "What is a cycle in the context of technical analysis?",
+        "options": [
+            "A repeating pattern of rises and falls in a security",
+            "A random fluctuation of stock prices",
+            "A fundamental analysis measure",
+            "A single event occurring once in a market"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What are the two types of cycles discussed in this chapter?",
+        "options": [
+            "Fixed cycles and nonlinear cycles",
+            "Short-term cycles and long-term cycles",
+            "Technical cycles and fundamental cycles",
+            "Linear cycles and harmonic cycles"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the definition of amplitude in cycle theory?",
+        "options": [
+            "The time it takes to complete a cycle",
+            "The height of the cycle from its baseline",
+            "The frequency of the cycle",
+            "The number of cycles in a given period"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the phase of a cycle?",
+        "options": [
+            "The length of time between two peaks",
+            "The translation of the wave along the time axis",
+            "The height of the wave",
+            "The frequency of the wave"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Which principle states that cycle lows tend to occur together?",
+        "options": [
+            "Summation",
+            "Synchronicity",
+            "Proportionality",
+            "Variation"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the dominant cycle?",
+        "options": [
+            "The cycle that is most visually evident on a chart",
+            "The cycle with the highest frequency",
+            "The cycle with the longest wavelength",
+            "The cycle that cannot be identified by harmonics"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What tool is used to identify significant cycle lengths?",
+        "options": [
+            "Moving averages",
+            "Spectrogram",
+            "RSI",
+            "Trendlines"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the significance of harmonicity in cycles?",
+        "options": [
+            "Cycles are related by multiples of two and three",
+            "All cycles have the same amplitude",
+            "Cycles always occur at fixed intervals",
+            "Cycles are independent of one another"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does summation refer to in cycle theory?",
+        "options": [
+            "The cumulative addition of multiple cycles to form a composite wave",
+            "The total number of cycles in a given timeframe",
+            "The synchronization of cycle peaks",
+            "The variation in cycle amplitude"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does the term 'left translation' mean in cycle analysis?",
+        "options": [
+            "The cycle low occurs earlier than expected",
+            "The cycle low occurs later than expected",
+            "The cycle high is lower than average",
+            "The cycle is skewed towards the right"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the typical method of measuring the period of a cycle?",
+        "options": [
+            "From peak to peak",
+            "From trough to trough",
+            "From baseline to peak",
+            "From phase to amplitude"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the inverse of the period in cycle theory?",
+        "options": [
+            "Amplitude",
+            "Phase",
+            "Frequency",
+            "Harmonicity"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What is the Fisher transform used for?",
+        "options": [
+            "To normalize cycles into a Gaussian distribution",
+            "To calculate the amplitude of cycles",
+            "To identify dominant cycles on a chart",
+            "To smooth moving averages"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is a wavelet diagram used for in cycle theory?",
+        "options": [
+            "To visualize changes in cycle dominance over time",
+            "To calculate cycle frequency",
+            "To plot the amplitude of a single cycle",
+            "To measure phase angles"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the primary purpose of using harmonics in cycle analysis?",
+        "options": [
+            "To confirm the validity of the dominant cycle",
+            "To increase the amplitude of the cycle",
+            "To eliminate phase variation",
+            "To measure frequency"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the importance of nominal cycles in technical analysis?",
+        "options": [
+            "They guarantee a perfect fit for all securities",
+            "They provide a starting point for cycle research",
+            "They are derived solely from economic data",
+            "They are independent of market conditions"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'right translation' mean in cycle analysis?",
+        "options": [
+            "The cycle low occurs earlier than expected",
+            "The cycle low occurs later than expected",
+            "The cycle amplitude is reduced",
+            "The cycle frequency is increased"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is proportionality in the context of cycles?",
+        "options": [
+            "The amplitude of a cycle is proportional to its period",
+            "The phase angle of a cycle is proportional to its amplitude",
+            "The wavelength of a cycle is proportional to its frequency",
+            "The harmonic cycles are proportional to the dominant cycle"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does the term 'frequency' refer to in cycle theory?",
+        "options": [
+            "The height of the wave",
+            "The number of cycles occurring in a unit of time",
+            "The time it takes to complete one cycle",
+            "The translation of the cycle along the time axis"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does JM Hurst's principle of commonality describe?",
+        "options": [
+            "The uniqueness of each cycle",
+            "The shared characteristics of cycles across markets",
+            "The fixed intervals between cycle lows",
+            "The importance of amplitude in technical analysis"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the role of spectrograms in cycle analysis?",
+        "options": [
+            "To measure amplitude",
+            "To identify significant cycle lengths",
+            "To smooth price data",
+            "To calculate moving averages"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the relationship between frequency and period in cycle theory?",
+        "options": [
+            "They are inversely related",
+            "They are directly proportional",
+            "They are unrelated",
+            "They are both measured in amplitude"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does the principle of variation state about cycles?",
+        "options": [
+            "Cycles always occur at fixed intervals",
+            "Cycles deviate from theoretical perfection",
+            "Cycle lows are always in sync",
+            "Cycle amplitude is constant over time"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a composite wave in cycle theory?",
+        "options": [
+            "A single dominant cycle",
+            "The sum of multiple cycles",
+            "The longest cycle in a market",
+            "The amplitude of a dominant cycle"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a dominant cycle often associated with in commodities?",
+        "options": [
+            "The seasonal patterns in production and demand",
+            "The fundamental price movements",
+            "The economic cycles",
+            "The Fibonacci sequence"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the practical use of the Fisher transform in cycle theory?",
+        "options": [
+            "To eliminate noise in price data",
+            "To convert cycles into a Gaussian distribution for statistical analysis",
+            "To identify dominant cycles using Fourier transforms",
+            "To calculate cycle amplitude"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the relationship between amplitude and wavelength in proportionality?",
+        "options": [
+            "Amplitude is inversely proportional to wavelength",
+            "Amplitude is directly proportional to wavelength",
+            "Amplitude is unrelated to wavelength",
+            "Amplitude decreases with higher frequency"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the importance of amplitude in identifying cycles?",
+        "options": [
+            "It defines the frequency of the cycle",
+            "It measures the height of the wave, indicating the strength of the cycle",
+            "It determines the translation of the wave",
+            "It calculates the dominant cycle"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does JM Hurst's principle of synchronicity suggest?",
+        "options": [
+            "Cycle highs always align perfectly",
+            "Cycle lows tend to occur together, confirming cycle validity",
+            "Cycles are independent of each other",
+            "All cycles follow fixed intervals"
+        ],
+        "correctAnswer": 1
+    },
+];
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "Index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
