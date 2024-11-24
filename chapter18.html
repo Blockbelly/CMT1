@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Futures </title>
+    <title> Elliot Wave Theory </title>
     <style>
         :root {
             --bg-primary: #f4f7fb;
@@ -135,529 +135,310 @@
     </style>
 </head>
 <body>
-    <h1>CMT Level I - Measuring Market Strength (Ch 18) </h1>
+    <h1>CMT Level I - Elliot Wave Theory (Ch 16)</h1>
    <br>	
 <br>
     <div class="quiz-container" id="quiz"></div>
     <div class="feedback" id="feedback"></div>
     <div class="nav-buttons">
-        <button onclick="goHome()">Home</button>
+        <button onclick="location.href='index.html'">Home</button>
         <button onclick="previousQuestion()">Back</button>
         <button onclick="nextQuestion()">Next</button>
         <button onclick="skipQuestion()">Skip</button>
     </div>
     <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
-	<div id="review-section" style="display: none; margin-top: 20px;">
-
-</div>
-
-    <script>
-        const questions = [
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Futures </title>
-    <style>
-        :root {
-            --bg-primary: #f4f7fb;
-            --text-primary: #1d1d1f;
-            --text-secondary: #86868b;
-            --accent-color: #007aff;
-            --card-bg: white;
-            --shadow-light: rgba(0, 0, 0, 0.08);
-            --shadow-medium: rgba(0, 0, 0, 0.12);
-            --button-hover: #005bb5;
-            --button-border: #e0e0e5;
-            --button-radius: 12px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
-            background-color: var(--bg-primary);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 28px;
-            color: var(--text-primary);
-        }
-
-        .quiz-container {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
-            padding: 20px;
-            max-width: 600px;
-            text-align: center;
-            width: 100%;
-        }
-
-        .question {
-            font-size: 20px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            color: var(--text-primary);
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .option {
-            background: #f2f2f7;
-            border-radius: var(--button-radius);
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: left;
-            font-size: 16px;
-            border: 1px solid var(--button-border);
-        }
-
-        .option:hover {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        .feedback {
-            margin-top: 10px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .nav-buttons {
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .nav-buttons button {
-            background-color: var(--card-bg);
-            color: var(--accent-color);
-            border: 1px solid var(--button-border);
-            padding: 10px 20px;
-            border-radius: var(--button-radius);
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .nav-buttons button:hover {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        .score {
-            margin-top: 10px;
-            font-size: 16px;
-            color: var(--text-secondary);
-        }
-
-        @media (max-width: 600px) {
-            .nav-buttons {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .quiz-container {
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <h1>CMT Level I - Measuring Market Strenght (Ch 18) </h1>
-   <br>	
-<br>
-    <div class="quiz-container" id="quiz"></div>
-    <div class="feedback" id="feedback"></div>
-    <div class="nav-buttons">
-        <button onclick="goHome()">Home</button>
-        <button onclick="previousQuestion()">Back</button>
-        <button onclick="nextQuestion()">Next</button>
-        <button onclick="skipQuestion()">Skip</button>
-    </div>
-    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
-	<div id="review-section" style="display: none; margin-top: 20px;">
-
-</div>
-
     <script>
         const questions = [
     {
-        "question": "What is the primary purpose of a futures contract?",
+        "question": "What is the primary purpose of market breadth analysis?",
         "options": [
-            "To hedge against price volatility",
-            "To guarantee profit in trading",
-            "To eliminate market risks",
-            "To invest in equities"
+            "To identify support and resistance levels",
+            "To evaluate the performance of all constituents in a market index",
+            "To measure trading volume trends",
+            "To predict future price movements"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the advance-decline line measure?",
+        "options": [
+            "The difference between advancing and declining stocks in an index",
+            "The volume of trades for advancing stocks",
+            "The relationship between price and volume",
+            "The average price of advancing stocks"
         ],
         "correctAnswer": 0
     },
     {
-        "question": "Where did the concept of futures originate?",
+        "question": "What does a negative divergence in breadth indicate?",
         "options": [
-            "Dutch tulip markets",
-            "London stock exchange",
-            "American agricultural markets",
-            "Japanese rice markets"
+            "A potential market reversal or weakness in the current trend",
+            "A strong bullish trend",
+            "High market liquidity",
+            "A confirmed upward trend"
         ],
         "correctAnswer": 0
     },
     {
-        "question": "Who are the primary participants in futures markets?",
+        "question": "Who first documented the advance-decline line in 1926?",
         "options": [
-            "Only producers and consumers",
-            "Speculators, producers, and hedgers",
-            "Government regulators",
-            "Retail investors exclusively"
+            "Charles Dow",
+            "Leonard Ayres",
+            "Martin Zweig",
+            "Sherman McClellan"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What does the term 'maturity' in a futures contract mean?",
+        "question": "What is the purpose of the McClellan Oscillator?",
         "options": [
-            "The length of the contract",
-            "The date when the contract ceases",
-            "The age of the asset",
-            "The start date of the contract"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What happens at the maturity of a futures contract?",
-        "options": [
-            "The contract is automatically extended",
-            "Goods must be delivered or settled in cash",
-            "It transitions into an options contract",
-            "It becomes invalid"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is the role of speculators in futures markets?",
-        "options": [
-            "To take physical delivery of goods",
-            "To provide liquidity to the market",
-            "To stabilize long-term prices",
-            "To reduce volatility in stocks"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What does open interest measure?",
-        "options": [
-            "The daily number of trades",
-            "The number of outstanding contracts",
-            "The trading volume of an asset",
-            "The total profits of traders"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What does 'volume' represent in futures trading?",
-        "options": [
-            "Number of outstanding contracts",
-            "Number of contracts traded in a day",
-            "Total market capitalization",
-            "The average price movement"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is the 'front month' in futures trading?",
-        "options": [
-            "The longest maturity date",
-            "The most recent or nearest delivery month",
-            "The least traded contract",
-            "The most expensive contract"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is a continuous contract in futures?",
-        "options": [
-            "A contract that never expires",
-            "A synthetic price combining all contracts",
-            "A contract for immediate delivery",
-            "A futures contract extended every quarter"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is the 'settlement price' in futures?",
-        "options": [
-            "The agreed price at the start of the contract",
-            "The official final price of the day",
-            "The lowest price traded in a day",
-            "The average price over the contract period"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What does the Commitment of Traders (COT) report show?",
-        "options": [
-            "Only the volume of futures traded",
-            "Breakdown of open interest by trader types",
-            "The daily settlement price",
-            "The average contract price"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What does contango in futures markets indicate?",
-        "options": [
-            "Future prices are lower than spot prices",
-            "Future prices are higher than spot prices",
-            "An absence of market liquidity",
-            "The market is in equilibrium"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What does backwardation mean?",
-        "options": [
-            "Spot prices are higher than future prices",
-            "Future prices are higher than spot prices",
-            "There is high market volatility",
-            "Trading volume is decreasing"
+            "To measure overbought and oversold conditions using exponential moving averages of breadth",
+            "To calculate the average price of advancing stocks",
+            "To determine volume spikes in declining stocks",
+            "To predict market highs and lows"
         ],
         "correctAnswer": 0
     },
     {
-        "question": "What is the main purpose of hedging with futures?",
+        "question": "What does a rising advance-decline line indicate?",
         "options": [
-            "To ensure maximum profit",
-            "To lock in prices and reduce risk",
-            "To eliminate trading commissions",
-            "To diversify into equities"
+            "The market is experiencing bearish momentum",
+            "The market is being driven by a few large-cap stocks",
+            "The market's upward trend is broadly supported",
+            "The market is overbought"
         ],
-        "correctAnswer": 1
+        "correctAnswer": 2
     },
     {
-        "question": "What is the basis in futures markets?",
+        "question": "What is the McClellan Summation Index?",
         "options": [
-            "The relationship between futures and spot prices",
-            "The fundamental value of the underlying asset",
-            "The average price across all contracts",
-            "The total profit made by traders"
+            "An accumulation of the McClellan Oscillator values",
+            "A measure of volume for advancing stocks",
+            "A calculation of relative strength for declining stocks",
+            "An indicator of moving average crossovers"
         ],
         "correctAnswer": 0
     },
     {
-        "question": "What does an active month in futures trading represent?",
+        "question": "What does the advance-decline ratio represent?",
         "options": [
-            "The nearest maturity contract",
-            "The contract with the highest trading volume",
-            "The most expensive contract",
-            "The longest duration contract"
+            "The percentage of advancing stocks compared to total stocks",
+            "The ratio of advancing stocks to declining stocks",
+            "The average price movement of all stocks in an index",
+            "The difference between advancing and declining stock volume"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What is the role of margin in futures trading?",
+        "question": "What is the significance of new highs and new lows in breadth analysis?",
         "options": [
-            "To eliminate the need for physical delivery",
-            "To ensure traders meet their financial obligations",
-            "To calculate daily profits",
-            "To predict price movements"
+            "They measure volume trends",
+            "They indicate the health of market trends by tracking stocks near yearly highs or lows",
+            "They are used to calculate RSI",
+            "They are irrelevant to breadth measures"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What is the primary challenge with continuous futures charts?",
+        "question": "What does a flat advance-decline line suggest?",
         "options": [
-            "Adjusting for contract rollovers",
-            "Handling extreme volatility",
-            "Eliminating speculator influence",
-            "Calculating open interest"
+            "The market trend is uncertain",
+            "The market is in a strong uptrend",
+            "The market is in a strong downtrend",
+            "The market has low liquidity"
         ],
         "correctAnswer": 0
     },
     {
-        "question": "What does rolling over a futures contract involve?",
+        "question": "What is the purpose of adding volume data to breadth analysis?",
         "options": [
-            "Closing and opening a position in a new contract",
-            "Transferring physical goods",
-            "Merging contracts into one",
-            "Cancelling the original contract"
+            "To measure the size of trades",
+            "To identify the impact of large-cap stocks on breadth",
+            "To calculate absolute price movements",
+            "To eliminate divergences in breadth measures"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is a breadth thrust indicator?",
+        "options": [
+            "A measure of volume for declining stocks",
+            "A sudden increase in market breadth signaling a potential trend change",
+            "An indicator of moving average crossovers",
+            "A calculation of RSI for breadth measures"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a declining breadth measure combined with a rising index price indicate?",
+        "options": [
+            "A positive divergence",
+            "A confirmation of the trend",
+            "A negative divergence suggesting weak market support",
+            "An overbought market condition"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "What does the percentage of stocks above their 50-day moving average indicate?",
+        "options": [
+            "Overbought or oversold conditions",
+            "Volume trends in the market",
+            "The relative strength of the index",
+            "The ratio of advancing to declining stocks"
         ],
         "correctAnswer": 0
     },
     {
-        "question": "What are agricultural futures primarily used for?",
+        "question": "What is the 80-60 rule in breadth analysis?",
         "options": [
-            "Tracking real estate markets",
-            "Managing price risks for farmers",
-            "Predicting weather patterns",
-            "Speculating on equity prices"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What type of futures contracts are based on indexes?",
-        "options": [
-            "Commodity futures",
-            "Equity index futures",
-            "Currency futures",
-            "Interest rate futures"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What are foreign exchange futures used for?",
-        "options": [
-            "Managing interest rate risk",
-            "Speculating on currency price movements",
-            "Tracking equity performance",
-            "Hedging commodity prices"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What do metals futures include?",
-        "options": [
-            "Only precious metals like gold and silver",
-            "Precious and industrial metals like copper and zinc",
-            "Equity and commodity-based metals",
-            "Metals linked exclusively to ETFs"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is the primary difference between volume and open interest?",
-        "options": [
-            "Volume measures activity; open interest measures outstanding contracts",
-            "Open interest reflects price changes; volume reflects value",
-            "Volume only applies to equities; open interest applies to futures",
-            "Open interest changes daily; volume remains constant"
+            "When breadth reaches above 80 and falls below 60, it often signals further declines",
+            "When 80% of stocks advance while 60% decline, it signals market reversal",
+            "It identifies the strongest 80% of stocks in an index",
+            "It calculates the volume of the top 60% of stocks"
         ],
         "correctAnswer": 0
     },
     {
-        "question": "What does a synthetic continuous contract represent?",
+        "question": "What does the Arms Index (TRIN) measure?",
         "options": [
-            "The sum of all futures prices",
-            "A single price combining multiple contracts",
-            "The average spot price of an asset",
-            "A future contract with no expiration"
+            "The average volume of advancing stocks",
+            "The ratio of advancing stocks and volume to declining stocks and volume",
+            "The price difference between advancing and declining stocks",
+            "The percentage of stocks making new highs"
         ],
         "correctAnswer": 1
     },
     {
-        "question": "What does a margin call require traders to do?",
+        "question": "How can breadth analysis predict potential market tops?",
         "options": [
-            "Deposit additional funds to cover potential losses",
-            "Increase their trading volume",
-            "Roll over their contracts",
-            "Close their current positions"
+            "By identifying positive divergences",
+            "By showing negative divergences where breadth weakens while the index rises",
+            "By measuring the absolute number of advancing stocks",
+            "By tracking RSI trends in breadth"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'unchanged issues' refer to in breadth analysis?",
+        "options": [
+            "Stocks with no price change compared to the previous day",
+            "Stocks that trade at their 52-week lows",
+            "Stocks that have not been traded for a week",
+            "Stocks that maintain constant volume"
         ],
         "correctAnswer": 0
     },
     {
-        "question": "What is the role of speculators in the futures market?",
+        "question": "What is the significance of extreme readings in the McClellan Oscillator?",
         "options": [
-            "To stabilize prices",
-            "To provide liquidity",
-            "To eliminate delivery risk",
-            "To predict stock prices"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "Which type of futures contract allows for cash settlement?",
-        "options": [
-            "All futures contracts",
-            "Some futures contracts, depending on the agreement",
-            "Only commodity-based contracts",
-            "Only equity futures"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is the purpose of the Commitment of Traders (COT) report?",
-        "options": [
-            "To predict future price movements",
-            "To classify trader types and analyze open interest",
-            "To calculate the settlement price",
-            "To provide historical price trends"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What does contango suggest about futures prices?",
-        "options": [
-            "Future prices are lower than spot prices",
-            "Future prices are higher than spot prices",
-            "The market is in equilibrium",
-            "Prices are highly volatile"
-        ],
-        "correctAnswer": 1
-    },
-    {
-        "question": "What is backwardation in futures markets?",
-        "options": [
-            "Spot prices are higher than future prices",
-            "Future prices are higher than spot prices",
-            "There is increased liquidity",
-            "There is reduced trading activity"
+            "They signal overbought or oversold conditions in the market",
+            "They predict future price trends",
+            "They identify new highs and lows",
+            "They calculate volume divergences"
         ],
         "correctAnswer": 0
     },
     {
-        "question": "What is an example of hedging with futures?",
+        "question": "How does volume affect the interpretation of breadth measures?",
         "options": [
-            "A farmer locking in wheat prices for the harvest",
-            "A trader speculating on currency fluctuations",
-            "An investor buying index futures for profit",
-            "A company issuing new stock to investors"
-        ],
-        "correctAnswer": 0
-    },
-    {
-        "question": "What does the term 'basis' refer to in futures?",
-        "options": [
-            "The difference between futures and spot prices",
-            "The fundamental value of the underlying asset",
-            "The average daily trading volume",
-            "The total number of outstanding contracts"
-        ],
-        "correctAnswer": 0
-    },
-    {
-        "question": "What does a large open interest indicate?",
-        "options": [
-            "High market activity",
-            "Large number of outstanding contracts",
-            "Stable market prices",
-            "High trading volume"
+            "It reduces the reliability of breadth signals",
+            "It emphasizes the influence of larger-cap stocks",
+            "It predicts future price movements",
+            "It removes divergences from breadth analysis"
         ],
         "correctAnswer": 1
     },
+    {
+        "question": "What does the advance-decline ratio below 1 signify?",
+        "options": [
+            "More declining stocks than advancing stocks",
+            "More advancing stocks than declining stocks",
+            "A neutral market trend",
+            "The market is overbought"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What does the term 'volume thrust oscillator' refer to?",
+        "options": [
+            "An indicator of volume spikes for advancing stocks",
+            "A measure of market breadth using volume data",
+            "A calculation of RSI for declining stocks",
+            "An oscillator showing price trends"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the significance of a double divergence in breadth analysis?",
+        "options": [
+            "It signals an extremely strong market trend",
+            "It provides additional confirmation of trend reversals",
+            "It eliminates the need for volume data",
+            "It identifies stocks with relative strength"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the McClellan Oscillator's crossing of the zero line indicate?",
+        "options": [
+            "A market reversal",
+            "A bullish or bearish signal depending on direction",
+            "The market is neutral",
+            "An overbought condition"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does the term 'breadth thrust' signify in market analysis?",
+        "options": [
+            "A breakout in RSI levels",
+            "A sudden surge in market breadth indicating trend continuation",
+            "A divergence between price and breadth",
+            "An oscillation in volume trends"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What is the primary role of the summation index in breadth analysis?",
+        "options": [
+            "To track the cumulative values of the McClellan Oscillator",
+            "To predict future volume trends",
+            "To calculate moving averages",
+            "To measure the relative strength of stocks"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "How are stocks above their moving averages used in breadth analysis?",
+        "options": [
+            "To identify overbought or oversold conditions",
+            "To track volume spikes in stocks",
+            "To predict long-term price trends",
+            "To calculate market liquidity"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "What is the Arms Index also known as?",
+        "options": [
+            "RSI",
+            "TRIN",
+            "AD Ratio",
+            "McClellan Oscillator"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "What does a breadth thrust above 1.5 suggest?",
+        "options": [
+            "A bearish market signal",
+            "A significant upward market momentum",
+            "A neutral market condition",
+            "A declining volume trend"
+        ],
+        "correctAnswer": 1
+    },			
 ];
 
 
@@ -735,7 +516,7 @@
         };
 
         const goHome = () => {
-            window.location.href = "index.html"; // Replace with your home page URL
+            window.location.href = "Index.html"; // Replace with your home page URL
         };
 
         // Initial display
