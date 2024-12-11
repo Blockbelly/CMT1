@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Intro to Charts 2 </title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level I - Intro to Charts 2 (Ch4) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+    <script>
+        const questions = [
+    {
+        "question": "You are analyzing long-term price trends for a stock that has grown significantly over the last 20 years. Which type of scale should you use to get a clearer view of percentage changes?",
+        "options": [
+            "Arithmetic scale",
+            "Logarithmic scale",
+            "Linear scale",
+            "Tick chart"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are comparing two indices: the UK FTSE 100 (trading at 7,000) and the US Dow Jones (trading at 35,000). How should you display them on the same chart?",
+        "options": [
+            "Use a single y-axis for both indices.",
+            "Use separate y-axes to properly scale each index.",
+            "Ignore scaling and overlay both indices directly.",
+            "Use an arithmetic scale for both indices."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You notice a chart showing the Dow Jones index alongside the FTSE 100, but the Dow appears to be trading at 8,000 instead of 35,000. What does this indicate?",
+        "options": [
+            "The chart is using incorrect data.",
+            "The indices are not properly scaled.",
+            "The FTSE 100 is outperforming the Dow.",
+            "The Dow is experiencing a sharp decline."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Your client asks why logarithmic scales are better for long-term analysis. How should you explain it?",
+        "options": [
+            "Logarithmic scales emphasize dollar changes.",
+            "Logarithmic scales show percentage changes more accurately.",
+            "Logarithmic scales reduce market volatility.",
+            "Logarithmic scales simplify short-term trends."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You want to compare the Consumer Price Index (CPI), GDP, and Producer Price Index (PPI) trends over several decades. What type of chart is best suited for this?",
+        "options": [
+            "Candlestick chart",
+            "Line chart",
+            "Bar chart",
+            "Equivolume chart"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You see a chart with multiple y-axes. How can you identify if the data sets are incorrectly scaled?",
+        "options": [
+            "Check if the data sets overlap perfectly.",
+            "Look for differences in starting and ending values on the y-axis.",
+            "Ensure all lines are color-coded.",
+            "Ignore the scales and focus on patterns."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "A client asks why volume is displayed as a histogram below price charts. How should you explain it?",
+        "options": [
+            "It makes the chart easier to read.",
+            "It visually represents trading activity during each period.",
+            "It emphasizes price changes.",
+            "It highlights logarithmic patterns."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are reviewing a chart with volume bars. What does a large spike in the volume histogram typically indicate?",
+        "options": [
+            "Low trading interest",
+            "A potential breakout or reversal",
+            "A minor market fluctuation",
+            "Market inactivity"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are analyzing a long-term stock chart, and the price appears to grow exponentially. What type of scale would help you better understand the trend?",
+        "options": [
+            "Arithmetic scale",
+            "Logarithmic scale",
+            "Linear scale",
+            "Weekly tick chart"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You need to create a chart where the width of each bar represents the volume traded. Which type of chart should you use?",
+        "options": [
+            "Candlestick chart",
+            "Equivolume chart",
+            "Bar chart",
+            "Line chart"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You see a chart where bars vary in width. What does the width represent in an equivolume chart?",
+        "options": [
+            "The time period",
+            "The trading volume",
+            "The price range",
+            "The number of trades"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "A chart shows a significant difference between price movements on an arithmetic scale and a logarithmic scale. What does this imply?",
+        "options": [
+            "The price changes are large in absolute terms.",
+            "The percentage changes are consistent.",
+            "The data is inaccurate.",
+            "The time scale is incorrect."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Why might long-term investors prefer logarithmic charts over arithmetic charts?",
+        "options": [
+            "Logarithmic charts show percentage changes more clearly.",
+            "Logarithmic charts are simpler to create.",
+            "Arithmetic charts provide more detail.",
+            "Logarithmic charts eliminate volatility."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "You are creating a chart that summarizes decades of data. What is the best approach for displaying the time scale?",
+        "options": [
+            "Include every single data point.",
+            "Summarize the data into intervals like years or decades.",
+            "Use a nonlinear scale.",
+            "Display only the most recent data."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Your client wants to see how two indices performed during the COVID crash. What chart feature would help them understand the correlation?",
+        "options": [
+            "Using different chart types for each index.",
+            "Overlaying the indices on the same chart with dual y-axes.",
+            "Using an arithmetic scale.",
+            "Displaying volume only."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "In a multi-line chart comparing several economic indicators, what should you ensure?",
+        "options": [
+            "That each line has a separate chart.",
+            "That all data sets share the same y-axis scale unless properly labeled.",
+            "That the lines are color-coded randomly.",
+            "That the chart uses an arithmetic scale."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "When analyzing daily price data for a stock, what is the standard way to display volume?",
+        "options": [
+            "As a histogram below the price chart.",
+            "Overlaying the volume on the price chart.",
+            "Using a line chart for volume.",
+            "Ignoring volume data."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "You notice that two indices are bottoming at the same time on a comparison chart. What might this suggest?",
+        "options": [
+            "There is no correlation.",
+            "The indices are moving in tandem.",
+            "One index is outperforming the other.",
+            "The chart is incorrect."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are creating a chart for a client who wants to see price trends and volume together. What chart type is most appropriate?",
+        "options": [
+            "A line chart with volume histogram below.",
+            "A bar chart with volume lines overlaid.",
+            "A tick chart with no volume.",
+            "A chart showing only closing prices."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "In a logarithmic chart, what does an equal vertical distance between two price points represent?",
+        "options": [
+            "An equal dollar change.",
+            "An equal percentage change.",
+            "An equal volume change.",
+            "An equal time change."
+        ],
+        "correctAnswer": 1
+    }
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
