@@ -1,0 +1,442 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Ethics - Standard 2 </title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level 1 - Ethics - Standard 2 (1) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+	<div id="review-section" style="display: none; margin-top: 20px;">
+	</div>
+</div>
+
+    <script>
+        const questions = [
+    {
+        "question": "You receive insider information from a friend who works at a company about an upcoming merger. What should you do?",
+        "options": [
+            "Trade on the information quickly before it becomes public.",
+            "Wait until the information is publicly announced before trading.",
+            "Share the information with your clients.",
+            "Disclose the information to your family members so they can trade."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are about to release a recommendation to clients. When can you trade on the same recommendation for your personal account?",
+        "options": [
+            "Immediately after writing the recommendation.",
+            "After giving clients enough time to act on the recommendation.",
+            "Before notifying clients to get the best price.",
+            "At the same time as your clients."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You learn that your firm is about to acquire another company. What action would be a breach of Standard 2A?",
+        "options": [
+            "Buying shares of the target company based on this information.",
+            "Waiting for the public announcement before trading.",
+            "Reporting the information to your compliance officer.",
+            "Recommending the stock to clients after the news is public."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Your family member asks for advice on a stock you are about to issue a buy recommendation for. What should you do?",
+        "options": [
+            "Give them the information since they are family.",
+            "Tell them to wait until the recommendation is released to all clients.",
+            "Allow them to trade before the public release.",
+            "Ignore the request to avoid conflict."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Your firm offers premium services where high-paying clients get recommendations first. Is this a breach?",
+        "options": [
+            "Yes, all clients must receive recommendations at the same time.",
+            "No, it is acceptable as long as the structure is disclosed.",
+            "Yes, this gives an unfair advantage to premium clients.",
+            "Yes, unless all clients pay the same fee."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You hear a rumor about a company’s potential bankruptcy from an unreliable source. What should you do?",
+        "options": [
+            "Trade based on the rumor immediately.",
+            "Verify the information before taking any action.",
+            "Share the rumor with your clients.",
+            "Ignore the rumor since it is not reliable."
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "question": "You discover that your firm’s investment banking department has non-public information about a pending IPO. How should you handle this as an analyst?",
+        "options": [
+            "Use the information for your research report.",
+            "Ensure there are barriers (firewalls) between departments.",
+            "Share the information with selected clients.",
+            "Trade on the information for personal gain."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "A colleague selectively leaks pieces of insider information to make it appear public. Is this permissible?",
+        "options": [
+            "Yes, as long as the information is eventually public.",
+            "No, selective disclosure of material information is a breach.",
+            "Yes, if it benefits the firm.",
+            "No, unless clients benefit from it."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are having lunch with a company executive who mentions an upcoming product launch. What should you do?",
+        "options": [
+            "Trade on the information immediately.",
+            "Wait for the public announcement before trading.",
+            "Share the information with your team.",
+            "Recommend the stock to your clients."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are aware of a pending acquisition that will increase a stock's price. When is it appropriate to trade on this information?",
+        "options": [
+            "Once the information is publicly disclosed.",
+            "When you have confirmed it from multiple sources.",
+            "Immediately to secure profits.",
+            "After telling your family members."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "You have access to non-public information due to your role at a bank. How should your firm ensure compliance?",
+        "options": [
+            "Allow free communication between departments.",
+            "Implement firewalls to prevent information sharing.",
+            "Encourage sharing to maximize profits.",
+            "Use the information selectively for high-paying clients."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are asked to spread positive rumors about a company to boost its stock price. What should you do?",
+        "options": [
+            "Spread the rumors to help your firm’s position.",
+            "Refuse and report the request to compliance.",
+            "Do it only if it benefits your clients.",
+            "Ignore the request but take no further action."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Your firm’s trading desk is pumping a stock’s price to attract buyers. What does this violate?",
+        "options": [
+            "Standard 2A: Material Nonpublic Information",
+            "Standard 2B: Market Manipulation",
+            "Standard 1A: Knowledge of the Law",
+            "Standard 3A: Loyalty, Prudence, and Care"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You notice unusual trading activity just before a major announcement. What should you suspect?",
+        "options": [
+            "A normal market fluctuation.",
+            "Potential insider trading or market manipulation.",
+            "Increased investor interest.",
+            "A technical glitch."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "An investment promotion is disguised as research. What ethical principle does this violate?",
+        "options": [
+            "Market Manipulation",
+            "Mosaic Theory",
+            "Material Nonpublic Information",
+            "Best Execution"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "You are creating a research report using publicly available data and non-material information. What is this approach called?",
+        "options": [
+            "Insider trading",
+            "Selective disclosure",
+            "Mosaic theory",
+            "Market manipulation"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Your firm publishes a misleading report to boost interest in an upcoming IPO. What does this constitute?",
+        "options": [
+            "Fair dealing",
+            "Market manipulation",
+            "Proper disclosure",
+            "Due diligence"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You manipulate inputs in a quantitative model to make performance appear better. What does this violate?",
+        "options": [
+            "Best execution",
+            "Market manipulation",
+            "Duties to clients",
+            "Mosaic theory"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Your firm pumps liquidity into a thinly traded stock to attract more buyers. What ethical breach does this represent?",
+        "options": [
+            "Fair dealing",
+            "Market manipulation",
+            "Loyalty to clients",
+            "Proper communication"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You trade based on speculation from an unreliable source. Is this a breach?",
+        "options": [
+            "Yes, trading on any speculation is a breach.",
+            "No, if the source is unreliable and not material.",
+            "Yes, if it benefits your clients.",
+            "No, if the trade is profitable."
+        ],
+        "correctAnswer": 1
+    }
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
