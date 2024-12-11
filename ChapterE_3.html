@@ -1,0 +1,442 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Ethics - Standard 5 </title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level 1 - Ethics - Standard 5 (1) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+	<div id="review-section" style="display: none; margin-top: 20px;">
+	</div>
+</div>
+
+    <script>
+        const questions = [
+    {
+        "question": "You are a portfolio manager, and the company’s management instructs you to invest the entire corporate pension fund in the company’s own stock. What should you do under Standard 3A: Loyalty, Prudence, and Care?",
+        "options": [
+            "Comply with management's request to maintain good relations.",
+            "Invest as instructed and document the request.",
+            "Refuse to comply and explain that it is not in the best interest of the plan participants.",
+            "Invest a portion of the fund and seek further clarification."
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "Your client requests that you use a specific brokerage firm owned by their friend. You know this firm does not provide the best execution. What should you do?",
+        "options": [
+            "Use the brokerage firm without informing the client.",
+            "Refuse the request and use a firm that provides the best execution.",
+            "Inform the client of the potential drawbacks and proceed if they insist.",
+            "Ignore the client’s request and use your preferred brokerage."
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "You are managing an account for a family member who pays standard fees. How should you treat this account?",
+        "options": [
+            "Give it priority over other accounts.",
+            "Treat it like any other fee-paying client account.",
+            "Ignore it to avoid conflicts of interest.",
+            "Provide occasional benefits due to the relationship."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "A client insists on a high-risk investment strategy despite your recommendations against it. What is the appropriate action?",
+        "options": [
+            "Ignore the client’s request.",
+            "Proceed with the strategy after explaining the risks and obtaining written consent.",
+            "Refuse to implement the strategy and terminate the relationship.",
+            "Consult your colleagues before deciding."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are asked to act as an expert witness in a case involving two firms. One firm offers you additional compensation. What should you do?",
+        "options": [
+            "Accept the compensation and disclose it during testimony.",
+            "Decline the compensation to remain impartial.",
+            "Proceed with the compensation but inform your employer.",
+            "Accept the compensation if it does not affect your testimony."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Your client wants to trade frequently to maximize short-term gains, but you know this will generate unnecessary commissions. What should you do?",
+        "options": [
+            "Follow the client’s instructions without question.",
+            "Advise the client about the impact of excessive trading on their returns.",
+            "Ignore the client’s requests and implement a long-term strategy.",
+            "Proceed with frequent trading to maximize your commissions."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are a financial advisor, and your client asks you to invest in a new high-risk technology startup. What should you consider under Standard 3C: Suitability?",
+        "options": [
+            "Invest immediately to meet the client’s demands.",
+            "Assess the client’s risk tolerance and portfolio before making a recommendation.",
+            "Reject the investment based on your personal opinions.",
+            "Invest only if the client provides a written statement."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You notice that a colleague is frequently trading small lots to maximize commissions. What should you do?",
+        "options": [
+            "Ignore it since it does not affect your clients.",
+            "Report the behavior to the compliance department.",
+            "Discuss it privately with the colleague.",
+            "Participate in the practice to avoid standing out."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are preparing a performance report and are tempted to exclude poor-performing periods. What should you do under Standard 3D: Performance Presentation?",
+        "options": [
+            "Exclude poor-performing periods to present better results.",
+            "Include all relevant periods to provide an accurate representation.",
+            "Highlight only the best-performing periods.",
+            "Use hypothetical data to improve the presentation."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "A client requests a change in investment strategy that is inconsistent with their risk profile. What should you do?",
+        "options": [
+            "Implement the change immediately.",
+            "Explain the risks and document the client’s decision.",
+            "Refuse the request and terminate the relationship.",
+            "Consult your colleagues before proceeding."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You receive non-public client information and are asked to share it with a charity for fundraising purposes. What should you do?",
+        "options": [
+            "Share the information since it is for a good cause.",
+            "Only share the information with the charity director.",
+            "Keep the information confidential unless the client consents.",
+            "Share the information with your supervisor first."
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "You are asked to allocate a large block of shares among several clients. How should you proceed under Standard 3B: Fair Dealing?",
+        "options": [
+            "Allocate the shares systematically and fairly among all eligible clients.",
+            "Give priority to your largest client.",
+            "Allocate shares based on client relationships.",
+            "Hold the shares for personal trading."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Your firm does not have an Investment Policy Statement (IPS). What should you avoid doing under Standard 3C: Suitability?",
+        "options": [
+            "Creating an IPS for your clients.",
+            "Claiming that your firm follows an IPS when it does not.",
+            "Advising clients based on their risk profiles.",
+            "Updating client portfolios regularly."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "A client requests that you refrain from voting proxies on their behalf. What is the appropriate action?",
+        "options": [
+            "Refuse the request and vote all proxies.",
+            "Honor the client’s request and document it.",
+            "Vote the proxies without informing the client.",
+            "Ignore the request and seek advice later."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You receive research reports from a brokerage firm that executes trades for your clients. What should you ensure?",
+        "options": [
+            "That the research does not influence your trading decisions.",
+            "That you prioritize trades with this brokerage.",
+            "That you inform clients of the arrangement.",
+            "That you avoid using the research entirely."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Your client insists on using a broker who charges higher fees. What is your responsibility?",
+        "options": [
+            "Follow the client’s request and inform them of the potential cost implications.",
+            "Ignore the client’s request and use a cheaper broker.",
+            "Proceed without documenting the decision.",
+            "Discuss the request with other clients."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "You are asked to provide investment advice to a client with unclear risk preferences. What should you do under Standard 3C?",
+        "options": [
+            "Offer generic advice applicable to all clients.",
+            "Clarify the client’s risk tolerance before making recommendations.",
+            "Suggest high-risk investments to maximize returns.",
+            "Avoid providing advice until the client invests."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Your client asks you to use directed brokerage to benefit a friend. What should you ensure?",
+        "options": [
+            "That the execution benefits the client’s interests.",
+            "That the brokerage firm offers the best research.",
+            "That the arrangement is documented and disclosed.",
+            "That you notify other clients of the arrangement."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "You accidentally disclose client information despite taking reasonable precautions. What is your ethical obligation?",
+        "options": [
+            "Resign immediately.",
+            "Inform your client and take steps to prevent future incidents.",
+            "Ignore the incident since it was accidental.",
+            "Blame the IT department for the breach."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are asked to cherry-pick data to make your performance report look better. What is the ethical course of action?",
+        "options": [
+            "Refuse to manipulate data and present accurate information.",
+            "Select the best data to attract new clients.",
+            "Exclude data that might confuse clients.",
+            "Use hypothetical data to improve the report."
+        ],
+        "correctAnswer": 0
+    }
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
