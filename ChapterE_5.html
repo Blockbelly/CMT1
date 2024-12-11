@@ -1,0 +1,442 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Ethics - Standard 5 </title>
+    <style>
+        :root {
+            --bg-primary: #f4f7fb;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --card-bg: white;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --button-hover: #005bb5;
+            --button-border: #e0e0e5;
+            --button-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px var(--shadow-light), 0 8px 24px var(--shadow-medium);
+            padding: 20px;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f2f2f7;
+            border-radius: var(--button-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+            border: 1px solid var(--button-border);
+        }
+
+        .option:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--button-border);
+            padding: 10px 20px;
+            border-radius: var(--button-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .score {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CMT Level 1 - Ethics - Standard 5 (1) </h1>
+   <br>	
+<br>
+    <div class="quiz-container" id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav-buttons">
+        <button onclick="goHome()">Home</button>
+        <button onclick="previousQuestion()">Back</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="score" id="score">Correct: 0 | Incorrect: 0</div>
+	<div id="review-section" style="display: none; margin-top: 20px;">
+	</div>
+</div>
+
+    <script>
+        const questions = [
+    {
+        "question": "You are a financial analyst and agree to provide weekly technical analysis reports for 500 stocks. After a few weeks, you realize this workload is overwhelming. What should you do?",
+        "options": [
+            "Continue with the commitment to avoid disappointing clients.",
+            "Reduce the number of stocks analyzed and inform clients about the change.",
+            "Ignore some stocks and hope clients won’t notice.",
+            "Hire a third-party analyst without informing clients."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You’ve developed a new quantitative model using 12 months of data and conclude it will work for the next 24 months. What standard might you violate if you recommend this model to clients?",
+        "options": [
+            "Standard 5A: Diligence and Reasonable Basis",
+            "Standard 5B: Communication with Clients",
+            "Standard 3A: Loyalty, Prudence, and Care",
+            "Standard 1D: Misconduct"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "You are using third-party research for a client recommendation. What should you do before relying on this research?",
+        "options": [
+            "Accept the research as valid since it comes from a reputable firm.",
+            "Conduct your own due diligence to ensure the research is sound.",
+            "Use the research and inform the client it is third-party data.",
+            "Rely on the research and update it only if the client asks."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Your investment model performed well during a bull market. You continue to market this performance without updating it for recent bear market data. What should you do?",
+        "options": [
+            "Keep marketing the model as-is.",
+            "Update the model to reflect recent market conditions.",
+            "Ignore the bear market data since the model worked before.",
+            "Discontinue marketing until the model shows positive results again."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You’re part of a research team that concludes a buy recommendation for a stock, but you personally disagree. The analysis process was sound. What should you do?",
+        "options": [
+            "Disassociate from the team’s recommendation.",
+            "Publicly express your disagreement.",
+            "Support the recommendation since the process was sound.",
+            "Ignore the recommendation and avoid discussing it."
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "You provide investment advice using a quantitative model. What must you ensure to comply with Standard 5A?",
+        "options": [
+            "You understand the model’s inputs and outputs.",
+            "You rely on the model without understanding it fully.",
+            "You share the model's details with all clients.",
+            "You only use the model for low-risk clients."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Your client receives a research report that contains both facts and your opinions. What should you do under Standard 5B?",
+        "options": [
+            "Ensure your opinions are presented as facts.",
+            "Clearly distinguish your opinions from factual information.",
+            "Avoid including opinions in the report.",
+            "Let the client interpret the information as they wish."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You notice a significant error in a client’s performance report. What should you do?",
+        "options": [
+            "Correct the error and notify the client immediately.",
+            "Wait until the client notices the error.",
+            "Ignore the error if it does not affect performance significantly.",
+            "Correct it in the next reporting period."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "You develop a new investment strategy but do not fully explain it to your clients because it is complex. What standard does this violate?",
+        "options": [
+            "Standard 5A: Diligence and Reasonable Basis",
+            "Standard 5B: Communication with Clients",
+            "Standard 3B: Fair Dealing",
+            "Standard 1C: Misrepresentation"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "A colleague gives you a research report to use for your recommendations. What is your responsibility under Standard 5A?",
+        "options": [
+            "Use the report without question.",
+            "Check the soundness of the report before using it.",
+            "Rely on the colleague’s judgment.",
+            "Ignore the report and create your own analysis."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are preparing a report on a new investment product and project guaranteed returns of 15% per year. What is wrong with this approach?",
+        "options": [
+            "You are making an opinion sound like a fact.",
+            "You are following Standard 5B correctly.",
+            "You are providing reasonable projections.",
+            "You are clearly distinguishing facts from opinions."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Your firm changes its investment process. What is your duty to existing and prospective clients?",
+        "options": [
+            "Notify only prospective clients.",
+            "Notify all clients and prospective clients about the changes.",
+            "Ignore the changes if they are minor.",
+            "Notify clients only if they request information."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You provide clients with historical backtesting results for a trading model. What must you ensure under Standard 5A?",
+        "options": [
+            "Only present the best-case scenario.",
+            "Present results based on various market conditions.",
+            "Exclude market conditions where the model performed poorly.",
+            "Show simplified data for client understanding."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Your firm uses sub-advisors for client portfolios. What is your responsibility regarding these sub-advisors?",
+        "options": [
+            "Blindly trust their performance.",
+            "Conduct due diligence on the sub-advisors.",
+            "Ignore their role in your recommendations.",
+            "Avoid disclosing their involvement to clients."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "You are asked to provide a performance report but lack recent data. What should you do under Standard 5C: Record Retention?",
+        "options": [
+            "Use the most recent data available and disclose its limitations.",
+            "Create estimates based on old data.",
+            "Ignore the report until new data is available.",
+            "Rely on third-party data without verification."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "You are leaving your current firm and want to take client records with you. What should you do?",
+        "options": [
+            "Take the records since you worked on them.",
+            "Leave the records as they belong to the firm.",
+            "Make copies for personal use.",
+            "Discuss taking records with your clients."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Your quantitative model fails to perform as expected. What should you do to comply with Standard 5A?",
+        "options": [
+            "Ignore the failure if your process was diligent.",
+            "Deny the failure to maintain client trust.",
+            "Stop using the model without informing clients.",
+            "Blame market conditions for the failure."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "Your firm does not have a policy for record retention. What is your obligation under Standard 5C?",
+        "options": [
+            "Keep records for at least 7 years.",
+            "Discard records after one year.",
+            "Rely on verbal agreements.",
+            "Keep records only for high-value clients."
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "You use complex derivatives in client portfolios. How should you communicate this to clients?",
+        "options": [
+            "Simplify the explanation to avoid confusion.",
+            "Fully describe the characteristics and risks of the derivatives.",
+            "Avoid discussing derivatives to prevent concerns.",
+            "Only disclose the potential benefits."
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "Your client complains about an error in their account statement. What should you do?",
+        "options": [
+            "Ignore the complaint if the error is small.",
+            "Investigate the error and correct it promptly.",
+            "Blame the client for misunderstanding.",
+            "Correct the error silently without notifying the client."
+        ],
+        "correctAnswer": 1
+    }
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const answeredQuestions = new Set();
+
+        const updateScore = () => {
+            document.getElementById("score").textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
+        };
+
+        const displayQuestion = () => {
+            const question = questions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz");
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = ""; // Clear feedback for new question
+
+            quizContainer.innerHTML = `
+                <div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options
+                            .map((option, i) => `<div class="option" onclick="checkAnswer(${i})">${option}</div>`)
+                            .join("")}
+                    </div>
+                </div>`;
+        };
+
+        const checkAnswer = (selectedOption) => {
+            if (answeredQuestions.has(currentQuestionIndex)) return;
+
+            const question = questions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                correctCount++;
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                incorrectCount++;
+                feedback.textContent = `Incorrect! Correct answer: ${question.options[question.correctAnswer]}`;
+                feedback.style.color = "red";
+            }
+
+            answeredQuestions.add(currentQuestionIndex);
+            updateScore();
+        };
+
+        const nextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const previousQuestion = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            } else {
+                alert("This is the first question.");
+            }
+        };
+
+        const skipQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                alert("You have reached the end of the quiz.");
+            }
+        };
+
+        const goHome = () => {
+            window.location.href = "index.html"; // Replace with your home page URL
+        };
+
+        // Initial display
+        displayQuestion();
+    </script>
+</body>
+</html>
